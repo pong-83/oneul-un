@@ -1121,7 +1121,8 @@ function poke(el){
       toast(`펑! ${G().name} 등장 (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧`)},250);
     return}
   const L=dailyLines(gi);pokeLine[gi]=((pokeLine[gi]??-1)+1)%L.length;
-  tapSay(el,`${L[pokeLine[gi]]}<span class="who">— ${G().name}</span>`);
+  const host=el.closest(".guide,.speak"),bub=host&&host.querySelector(".say,.bubbletxt");
+  if(bub){bub.innerHTML=`${L[pokeLine[gi]]}<span class="${bub.classList.contains("say")?"who":"small"}">— ${G().name}</span>`;bub.style.animation="none";void bub.offsetWidth;bub.style.animation="sayIn .35s cubic-bezier(.3,1.5,.5,1) both"}
 }
 document.addEventListener("click",ev=>{
   const m=ev.target.closest(".frame .mascot,.frame .peek,.onboard .mascot");
