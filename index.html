@@ -398,6 +398,15 @@ button.day:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(31,78,156,
 .tapsay.below::after{bottom:auto;top:-9px;border-top:0;border-bottom:7px solid var(--b3)}
 .tapsay .who{display:block;font-size:.7rem;color:var(--muted);margin-top:1px}
 .pk{position:absolute;z-index:66;pointer-events:none;font-family:var(--f-disp);font-weight:900;line-height:1;text-shadow:0 1px 0 #fff}
+.share{position:fixed;inset:0;z-index:68;display:grid;place-items:center;padding:16px;background:rgba(10,22,48,.55);overflow:auto;animation:fadeIn .25s ease both}
+.share-box{width:100%;max-width:440px;background:#fff;border:1px solid #6B87AE;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:winIn .4s cubic-bezier(.3,1.4,.5,1) both}
+.share-body{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.share-img{width:100%;display:grid;place-items:center;background:#EEF3F9;border-radius:12px;padding:10px}
+.share-img img{max-width:100%;max-height:56vh;border-radius:8px;box-shadow:0 6px 18px rgba(31,78,156,.25)}
+.segx{display:inline-flex;border:1px solid #9DA3AC;border-radius:99px;overflow:hidden}
+.segx button{border:none;padding:6px 14px;font-family:var(--f-disp);font-weight:800;background:linear-gradient(180deg,#fff,#E3E5E9);color:#3C4048}
+.segx button[aria-pressed="true"]{color:#fff;background:linear-gradient(180deg,#9CC6F5,#4F8EDD 50%,#2F6BC4 51%,#4F8EDD)}
+#lMsg,.lmsg{min-height:1.2em}
 .toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:#fff;border:2px solid var(--o3);border-radius:12px;padding:10px 16px;font-family:var(--f-disp);box-shadow:0 8px 24px rgba(31,78,156,.3);animation:toast .4s cubic-bezier(.3,1.5,.5,1)}
 @keyframes toast{from{transform:translate(-50%,40px);opacity:0}}
 @media (max-width:420px){.side{grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:12px}.h{font-size:1.1rem}.brand{font-size:1.25rem}.nav button{font-size:.82rem}.sh .tab span{display:none}.ch b{font-size:1.8rem}.c{width:calc((100% - 24px)/4)}.deck{gap:8px}}
@@ -548,6 +557,7 @@ img{max-width:100%}
             <p class="txt"><span class="lb">기운:</span><span id="hEnergy"></span></p>
             <p class="txt" id="hRelW"><span class="lb">관계:</span><span id="hRel"></span></p>
             <p class="txt"><span class="lb">어제와:</span><span id="hYest"></span></p>
+            <p class="txt"><span class="lb">이번 달:</span><span id="hMonth"></span></p>
           </div>
         </div>
         <div class="pad" style="display:flex;flex-direction:column;gap:8px" id="hBars"></div>
@@ -560,6 +570,7 @@ img{max-width:100%}
           </div>
         </div>
         <div class="pad cta" id="hCta"></div>
+        <div class="pad cta"><button class="gloss gray" id="shareBtn" type="button">📷 오늘 운세 공유 이미지</button></div>
       </div>
     </section>
 
@@ -605,6 +616,7 @@ img{max-width:100%}
           <label class="small" for="note">한 줄 기록</label>
           <textarea id="note" placeholder="예: 정말 예상 못한 데서 연락이 왔다"></textarea>
           <div class="row"><button class="gloss gray" data-go="home">← 홈으로</button><button class="gloss blue" id="saveNote">기록하기</button></div>
+          <div class="cta"><button class="gloss gray" id="shareBtn2" type="button">📷 카드와 운세 공유 이미지</button></div>
         </div>
       </div>
     </section>
@@ -662,6 +674,18 @@ img{max-width:100%}
     <div class="cele-friends" id="celeFriends"></div>
     <p class="say cele-say" id="celeSay" aria-live="polite"></p>
     <button class="gloss acc lg" id="celeClose" type="button">고마워! ✦</button>
+  </div>
+</div>
+<div class="share" id="share" hidden role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="share-box">
+    <div class="titlebar"><i class="orb" aria-hidden="true">★</i><span id="shTitle">공유 이미지</span><button type="button" class="wbtn" id="shClose">닫기</button></div>
+    <div class="share-body">
+      <div class="segx" id="shFmt" role="group" aria-label="이미지 크기"><button type="button" data-fmt="story" aria-pressed="true">스토리 9:16</button><button type="button" data-fmt="square" aria-pressed="false">정사각 1:1</button></div>
+      <div class="share-img"><img id="shImg" alt="오늘의 운세 공유 이미지"></div>
+      <p class="lmsg" id="shMsg" role="status"></p>
+      <div class="row" style="justify-content:center"><button type="button" class="gloss acc" id="shSave">이미지 저장</button><button type="button" class="gloss gray" id="shShare" hidden>공유하기</button></div>
+      <p class="small">생년월일과 사주 원국은 들어가지 않아요. 저장이 안 되면 이미지를 길게 누르거나 우클릭해서 저장하세요.</p>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -732,6 +756,7 @@ const TGX={
  "편인":{t:["직감이 예민한 날","혼자가 편한 날","남다른 생각이 떠오르는 날"],f:["생각이 깊어지고 남다른 직감이 살아나는 기운이에요. 혼자만의 시간이 답을 줘요.","독특한 아이디어와 탐구심이 커지는 기운이에요. 궁금한 걸 파고들기 좋아요.","눈치와 감이 예민해지는 기운이에요. 첫 느낌을 메모해 두면 나중에 맞을 때가 많아요."],i:["사람 많은 곳에선 쉽게 지칠 수 있어요.","생각이 많아져 결정을 미루기 쉬워요. 하나만 정하고 넘어가세요."],m:["10분 동안 혼자 걸으며 생각 정리하기","궁금했던 것 하나 깊이 찾아보기","오늘 든 직감 하나 메모하기"],s:[2,2,3]},
  "정인":{t:["도움과 배움의 날","든든한 지원이 오는 날","마음이 채워지는 날"],f:["누군가의 도움을 받거나 배우기 좋은 기운이에요. 문서, 공부, 계약 운이 있어요.","보살핌과 응원이 들어오는 기운이에요. 도움을 청하면 생각보다 쉽게 풀려요.","차분히 익히고 정리하는 기운이에요. 공부나 자격, 문서 일에 집중하기 좋아요."],i:["받은 도움에 고마움을 표현하면 운이 더 커져요.","기대고 싶은 마음이 커져요. 받은 만큼 작은 보답을 해보세요."],m:["책이나 글 한 편 끝까지 읽기","도움이 필요한 일 하나 누군가에게 부탁하기","배운 것 하나를 노트에 정리하기"],s:[3,3,4]}};
 /* 12운성: 일간이 오늘 지지에서 갖는 기운의 단계 */
+const MONTH_THEME={"비견":"내 힘으로 꾸려가는 흐름이 이어져요.","겁재":"경쟁과 지출 관리가 이번 달의 숙제예요.","식신":"즐기고 표현할수록 일이 풀려요.","상관":"새로운 시도와 변화가 많아요.","편재":"활동과 만남이 넓어져요.","정재":"차곡차곡 쌓고 관리하기 좋아요.","편관":"책임이 늘지만 그만큼 단단해져요.","정관":"평판과 신뢰가 쌓여요.","편인":"배우고 혼자 깊어지기 좋아요.","정인":"도움과 지원을 받기 좋아요."};
 const UNSEONG=["장생","목욕","관대","건록","제왕","쇠","병","사","묘","절","태","양"];
 const US_INFO=[["새싹처럼 기운이 돋아나는 날",4,"무언가를 새로 시작하기 좋은 에너지예요."],["들뜨고 설레는 날",3,"감정이 출렁이고 꾸미고 싶은 마음이 커져요. 충동 소비만 조심하세요."],["자신감이 차오르는 날",4,"의욕이 넘쳐요. 다만 너무 앞서 나가지 않게 속도를 맞추세요."],["제 실력이 나오는 날",5,"기운이 안정적으로 꽉 차 있어요. 중요한 일을 처리하기 좋아요."],["기운이 최고조인 날",5,"힘이 가장 센 날이에요. 그만큼 고집도 세지니 주변을 한 번 더 살피세요."],["노련하게 힘을 아끼는 날",3,"무리하기보다 경험을 살려 효율적으로 움직이면 좋아요."],["몸과 마음을 살피는 날",2,"기운이 살짝 가라앉아요. 컨디션 관리를 먼저 챙기세요."],["조용히 멈춰 생각하는 날",2,"활동보다 정리와 생각이 잘 되는 흐름이에요."],["차곡차곡 갈무리하는 날",2,"모아두고 저장하는 기운이에요. 새로 벌이기보다 마무리에 좋아요."],["끊고 새로 잇는 날",2,"흐름이 한 번 끊겼다 이어지는 때예요. 정리할 것은 과감히 정리하세요."],["새 계획을 품는 날",3,"아직 겉으로 드러나진 않지만 새로운 구상이 자라기 좋아요."],["차분히 힘을 기르는 날",3,"서두르지 않고 준비할수록 다음이 든든해져요."]];
 const US_START=[11,6,2,9,2,9,5,0,8,3];
@@ -748,8 +773,10 @@ function computeDay(dt,sj){
   const dm=sj.day.s,days=dayNo(dt),tj=dayPillar(dt.getFullYear(),dt.getMonth()+1,dt.getDate());
   const g1=tenGod(dm,tj.s),g2=tenGod(dm,BR_MAIN[tj.b]),A=TGX[g1],B=TGX[g2];
   const c10=Math.floor(days/10),c12=Math.floor(days/12);
-  const title=pickV(A.t,c10+dm),flow=pickV(A.f,c10*2+dm+1),inner=g2===g1?pickV(A.i,c12):`${g2}의 기운이 함께 들어와요. ${pickV(B.i,c12+dm)}`;
-  const mission=pickV(A.m,c10+dm*2);
+  const mp=saju(dt.getFullYear(),dt.getMonth()+1,dt.getDate(),12,0).month,mg=tenGod(dm,mp.s),mIdx=dt.getFullYear()*12+mp.b;
+  const monthLine=`${ST[mp.s]}${BR[mp.b]}월(${STK[mp.s]}${BRK[mp.b]}월)은 나에게 ${mg}의 달이에요. ${MONTH_THEME[mg]}`;
+  const title=pickV(A.t,c10+dm+mIdx),flow=pickV(A.f,c10*2+dm+1+mIdx),inner=g2===g1?pickV(A.i,c12+mIdx):`${g2}의 기운이 함께 들어와요. ${pickV(B.i,c12+dm+mIdx)}`;
+  const mission=pickV(A.m,c10+dm*2+mIdx);
   const us=unseong(dm,tj.b),[stageShort,energy,stageText]=US_INFO[us];
   const rels=[];let adj=[0,0,0];
   const nat=[sj.hour,sj.day,sj.month,sj.year];
@@ -769,7 +796,7 @@ function computeDay(dt,sj){
   let luckyEl=-1;for(let k=1;k<=5;k++){const e=(dmEl+k)%5;if(cnt[e]===minV){luckyEl=e;break}}
   let overEl=-1;for(let k=0;k<5;k++){const e=(dmEl+k)%5;if(cnt[e]===maxV){overEl=e;break}}
   const num=HADO[luckyEl][days%2];
-  return{days,tj,g1,g2,title,flow,inner,mission,us,stage:UNSEONG[us],stageShort,energy,stageText,rels,relText:rels.slice(0,2).map(r=>r.t).join(" "),sc,total,cnt,luckyEl,overEl,elName:ELNAME[luckyEl],color:LC[luckyEl],dir:LD[luckyEl],num};
+  return{days,tj,g1,g2,mg,monthLine,title,flow,inner,mission,us,stage:UNSEONG[us],stageShort,energy,stageText,rels,relText:rels.slice(0,2).map(r=>r.t).join(" "),sc,total,cnt,luckyEl,overEl,elName:ELNAME[luckyEl],color:LC[luckyEl],dir:LD[luckyEl],num};
 }
 function compareLine(D,Y){
   const d=D.total-Y.total,e=D.energy-Y.energy;
@@ -781,12 +808,12 @@ function compareLine(D,Y){
 }
 /* 캐릭터 대사: 매일 사주 계산 결과로 새로 만들어요 */
 const TONE=[
- D=>[`오늘 내 기운은 「${D.stage}」 단계, ${D.stageShort}이야!`,`오늘은 「${D.title}」! 같이 힘내자!`,`오늘은 ${D.elName} 기운이 필요해! 행운의 색은 ${D.color}, 숫자는 ${D.num}!`,`미션은 「${D.mission}」! 같이 하자!`,"히히 간지러워! 다섯 번 누르면 오늘 안내를 친구한테 넘길게!"],
- D=>[`오늘 그대의 기운은 「${D.stage}」, ${D.stageShort}이오.`,`오늘은 「${D.title}」이라 하오.`,`오늘은 ${D.elName}의 기운이 필요하오. ${josa(D.color,"을","를")} 곁에 두시고, 길한 수는 ${josa(D.num,"이오","오")}.`,`오늘의 과업은 「${D.mission}」, 부디 잊지 마시오.`,"어허, 갓이 비뚤어지오. 다섯 번 누르면 다른 이에게 안내를 넘기겠소."],
- D=>[`음냐… 오늘 기운은 「${D.stage}」… ${D.stageShort}이래…`,`오늘은… 「${D.title}」이래… zzz`,`${D.elName} 기운이… 필요하대… ${D.color}… 숫자는 ${D.num}…`,`미션… 「${D.mission}」… 같이 할래…?`,"으앗… 깼다… 다섯 번 깨우면… 친구한테 넘길래…"],
- D=>[`오늘 기운은 「${D.stage}」, ${D.stageShort}이래여!`,`오늘은 「${D.title}」이래여!`,`${D.elName} 기운이 필요해여! ${josa(D.color,"이랑","랑")} 숫자 ${D.num} 기억해여!`,`미션 「${D.mission}」 꼭 해여!`,"꺄르르 간지러워여! 다섯 번 누르면 친구 불러여!"],
- D=>[`허허, 오늘 네 기운은 「${D.stage}」, ${D.stageShort}이로구나.`,`오늘은 「${D.title}」이로구나.`,`오늘은 ${D.elName} 기운이 모자라니 ${josa(D.color,"을","를")} 가까이 하거라. 길한 수는 ${josa(D.num,"이니라","니라")}.`,`「${D.mission}」, 오늘 꼭 해보거라.`,"허허, 이 늙은이를 왜 찌르누. 다섯 번 찌르면 다른 녀석을 부르마."],
- D=>[`오늘 기운은 「${D.stage}」, ${D.stageShort}이다냥!`,`오늘은 「${D.title}」이다냥!`,`${D.elName} 기운이 필요하다냥! ${D.color}, 숫자 ${D.num} 기억하라냥`,`미션은 「${D.mission}」, 하라냥~`,"냥! 쓰다듬는 건 환영이다냥. 다섯 번 누르면 친구 부른다냥!"]];
+ D=>[`오늘 내 기운은 「${D.stage}」 단계, ${D.stageShort}이야!`,`오늘은 「${D.title}」! 같이 힘내자!`,`오늘은 ${D.elName} 기운이 필요해! 행운의 색은 ${D.color}, 숫자는 ${D.num}!`,`미션은 「${D.mission}」! 같이 하자!`,pickV(["히히 간지러워! 다섯 번 누르면 오늘 안내를 친구한테 넘길게!","나 오늘 컨디션 최고야! 다섯 번 누르면 친구 불러올게!","별 지팡이 충전 완료! 다섯 번 누르면 바통 터치!"],D.days)],
+ D=>[`오늘 그대의 기운은 「${D.stage}」, ${D.stageShort}이오.`,`오늘은 「${D.title}」이라 하오.`,`오늘은 ${D.elName}의 기운이 필요하오. ${josa(D.color,"을","를")} 곁에 두시고, 길한 수는 ${josa(D.num,"이오","오")}.`,`오늘의 과업은 「${D.mission}」, 부디 잊지 마시오.`,pickV(["어허, 갓이 비뚤어지오. 다섯 번 누르면 다른 이에게 안내를 넘기겠소.","부채 바람이 시원하오? 다섯 번 청하면 벗을 부르겠소.","예를 갖추시오… 하하, 농이오. 다섯 번이면 벗에게 넘기리다."],D.days)],
+ D=>[`음냐… 오늘 기운은 「${D.stage}」… ${D.stageShort}이래…`,`오늘은… 「${D.title}」이래… zzz`,`${D.elName} 기운이… 필요하대… ${D.color}… 숫자는 ${D.num}…`,`미션… 「${D.mission}」… 같이 할래…?`,pickV(["으앗… 깼다… 다섯 번 깨우면… 친구한테 넘길래…","구름은… 눌러도… 폭신해… 다섯 번이면… 교대할래…","오 분만… 더 잘게… 다섯 번 깨우면… 친구 부른다…"],D.days)],
+ D=>[`오늘 기운은 「${D.stage}」, ${D.stageShort}이래여!`,`오늘은 「${D.title}」이래여!`,`${D.elName} 기운이 필요해여! ${josa(D.color,"이랑","랑")} 숫자 ${D.num} 기억해여!`,`미션 「${D.mission}」 꼭 해여!`,pickV(["꺄르르 간지러워여! 다섯 번 누르면 친구 불러여!","빙글빙글~ 어지러워여! 다섯 번이면 친구 와여!","저 귀엽져? 다섯 번 누르면 친구랑 바꿔여!"],D.days)],
+ D=>[`허허, 오늘 네 기운은 「${D.stage}」, ${D.stageShort}이로구나.`,`오늘은 「${D.title}」이로구나.`,`오늘은 ${D.elName} 기운이 모자라니 ${josa(D.color,"을","를")} 가까이 하거라. 길한 수는 ${josa(D.num,"이니라","니라")}.`,`「${D.mission}」, 오늘 꼭 해보거라.`,pickV(["허허, 이 늙은이를 왜 찌르누. 다섯 번 찌르면 다른 녀석을 부르마.","안경이 어디 갔나… 아, 썼구나. 다섯 번이면 다른 녀석을 부르마.","운은 발로 뛰어 만드는 게야. 다섯 번 찌르면 교대하마."],D.days)],
+ D=>[`오늘 기운은 「${D.stage}」, ${D.stageShort}이다냥!`,`오늘은 「${D.title}」이다냥!`,`${D.elName} 기운이 필요하다냥! ${D.color}, 숫자 ${D.num} 기억하라냥`,`미션은 「${D.mission}」, 하라냥~`,pickV(["냥! 쓰다듬는 건 환영이다냥. 다섯 번 누르면 친구 부른다냥!","골골골골… 다섯 번 누르면 친구랑 바꾼다냥!","츄르 주면 더 봐준다냥. 다섯 번이면 친구 부른다냥!"],D.days)]];
 const PLAY=["히히 간지러워! 생일을 알려주면 오늘 운세를 봐줄게!","어허, 갓이 비뚤어지오. 생일을 일러주면 운을 살펴드리겠소.","으앗… 깼다… 생일 알려주면… 운세 봐줄게…","꺄르르! 생일 알려주면 운세 봐드려여!","허허, 태어난 날을 알려주면 운을 봐주마.","냥! 생일 알려주면 운세 봐준다냥!"];
 function dailyLines(k){const f=compute();if(!f)return[PLAY[k]];const L=TONE[k](f.D),s=f.D.days%L.length;return L.slice(s).concat(L.slice(0,s))}
 
@@ -1134,6 +1161,106 @@ document.addEventListener("click",ev=>{
   if(!m)return;ev.stopPropagation();poke(m);
 },true);
 
+
+/* ===== 공유 이미지 (폰 안에서 바로 그려요. 생년월일·사주 원국은 넣지 않아요) ===== */
+let shareFmt="story",shareBlob=null,shareTok=0;
+const SF="'Gothic A1','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif";
+function rr(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()}
+function txt(x,t,X,Y,size,weight,color,align,stroke){x.font=`${weight} ${size}px ${SF}`;x.textAlign=align||"left";x.textBaseline="alphabetic";
+  if(stroke){x.lineJoin="round";x.lineWidth=stroke[1];x.strokeStyle=stroke[0];x.strokeText(t,X,Y)}x.fillStyle=color;x.fillText(t,X,Y)}
+function wrapLines(x,t,maxW,size,weight){x.font=`${weight} ${size}px ${SF}`;const out=[];let line="";
+  for(const word of t.split(" ")){const tryL=line?line+" "+word:word;
+    if(x.measureText(tryL).width<=maxW){line=tryL;continue}
+    if(line)out.push(line);line="";
+    if(x.measureText(word).width<=maxW){line=word;continue}
+    for(const ch of word){if(x.measureText(line+ch).width>maxW&&line){out.push(line);line=ch}else line+=ch}}
+  if(line)out.push(line);return out}
+function drawStars(x,n,cx,cy,size){const gap=size*1.15,X0=cx-gap*2;for(let i=0;i<5;i++){const X=X0+i*gap;x.beginPath();for(let k=0;k<10;k++){const r=k%2?size*.22:size*.5,a=-Math.PI/2+k*Math.PI/5;x.lineTo(X+Math.cos(a)*r,cy+Math.sin(a)*r)}x.closePath();
+  x.fillStyle=i<n?"#FFB047":"rgba(255,255,255,.45)";x.fill();x.lineWidth=size*.07;x.lineJoin="round";x.strokeStyle=i<n?"#B45F0E":"rgba(28,70,137,.45)";x.stroke()}}
+async function mascotImg(k){const sym=document.getElementById("g"+k);const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 120" width="390" height="360">${sym.innerHTML}</svg>`;
+  const im=new Image();im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);try{await im.decode()}catch(e){}return im}
+function drawCardFace(x,c,X,Y,w){
+  const h=w*1.6;x.save();x.shadowColor="rgba(20,50,110,.35)";x.shadowBlur=w*.08;x.shadowOffsetY=w*.03;
+  rr(x,X,Y,w,h,w*.07);
+  if(!c){const g=x.createLinearGradient(0,Y,0,Y+h);g.addColorStop(0,"#9CC6F5");g.addColorStop(.48,"#5B97E3");g.addColorStop(.52,"#3E7FD6");g.addColorStop(1,"#2F6BC4");x.fillStyle=g;x.fill();x.restore();
+    x.lineWidth=w*.025;x.strokeStyle="#fff";rr(x,X,Y,w,h,w*.07);x.stroke();txt(x,"★",X+w/2,Y+h/2+w*.08,w*.25,900,"#fff","center");txt(x,"오늘의 카드 아직 안 뽑음",X+w/2,Y+h-w*.12,w*.065,800,"#fff","center");return}
+  const g=x.createLinearGradient(0,Y,0,Y+h);g.addColorStop(0,"#FFFFFF");g.addColorStop(.55,"#F3F8FE");g.addColorStop(1,"#E2EEFC");x.fillStyle=g;x.fill();x.restore();
+  x.lineWidth=w*.02;x.strokeStyle="#5B97E3";rr(x,X,Y,w,h,w*.07);x.stroke();
+  x.lineWidth=2;x.strokeStyle="#BFD6F3";rr(x,X+w*.045,Y+w*.045,w*.91,h-w*.09,w*.05);x.stroke();
+  txt(x,"— "+c[0]+" —",X+w/2,Y+w*.17,w*.075,700,"#2F6BC4","center");
+  const cx=X+w/2,cy=Y+h*.46,R=w*.24;
+  x.strokeStyle="rgba(91,151,227,.5)";x.lineWidth=w*.012;for(let i=0;i<24;i++){const a=i*Math.PI/12;x.beginPath();x.moveTo(cx+Math.cos(a)*R*1.42,cy+Math.sin(a)*R*1.42);x.lineTo(cx+Math.cos(a)*R*1.62,cy+Math.sin(a)*R*1.62);x.stroke()}
+  x.beginPath();x.arc(cx,cy,R+w*.03,0,Math.PI*2);x.fillStyle="#fff";x.fill();x.lineWidth=w*.008;x.strokeStyle="#BFD6F3";x.stroke();
+  const og=x.createLinearGradient(cx-R,cy-R,cx+R,cy+R);og.addColorStop(0,"#8FC0F2");og.addColorStop(.55,"#4F8EDD");og.addColorStop(1,"#2F6BC4");x.beginPath();x.arc(cx,cy,R,0,Math.PI*2);x.fillStyle=og;x.fill();
+  txt(x,c[3],cx,cy+R*.33,R*.95,900,"#fff","center");
+  txt(x,c[2].toUpperCase(),cx,Y+h-w*.27,w*.05,700,"#5B97E3","center");
+  txt(x,c[1],cx,Y+h-w*.15,w*.1,900,"#1C4689","center");
+  x.fillStyle="#F59124";rr(x,cx-w*.05,Y+h-w*.12,w*.1,w*.012,w*.006);x.fill();
+}
+async function makeShare(fmt){
+  const F=compute();if(!F)return null;
+  try{await Promise.all(["900 60px 'Gothic A1'","800 40px 'Gothic A1'","700 30px 'Gothic A1'"].map(f=>document.fonts.load(f)))}catch(e){}
+  const e=state.days[TODAY]||{},c=e.card!=null?CARDS[e.card]:null,D=F.D;
+  const W=1080,H=fmt==="story"?1920:1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d");
+  const bg=x.createRadialGradient(W*.3,H*.12,40,W*.5,H*.45,H*.95);bg.addColorStop(0,"#DDEEFF");bg.addColorStop(.45,"#7FB2EA");bg.addColorStop(1,"#2F6BC4");x.fillStyle=bg;x.fillRect(0,0,W,H);
+  x.fillStyle="rgba(255,255,255,.2)";x.beginPath();x.moveTo(0,0);x.lineTo(W,0);x.lineTo(W,H*.09);x.quadraticCurveTo(W/2,H*.02,0,H*.09);x.closePath();x.fill();
+  [[.08,.05],[.95,.19],[.95,.42],[.05,.55],[.88,.7],[.12,.86]].forEach(([a,b],i)=>txt(x,"✦",W*a,H*b,22+(i%3)*10,900,i%2?"#FFFFFF":"#FFE3C2","center"));
+  const date=`${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${"일월화수목금토"[now.getDay()]}요일`,ij=`${ST[D.tj.s]}${BR[D.tj.b]}日 · ${STK[D.tj.s]}${BRK[D.tj.b]}일`;
+  const mas=await mascotImg(gi),G0=GUIDES[gi];
+  const bars=(X,Y,w)=>{[["총운",F.total],["재물",F.sc[0]],["애정",F.sc[1]],["일·학업",F.sc[2]]].forEach(([l,v],i)=>{const y=Y+i*58;txt(x,l,X,y+26,30,800,"#22324A");
+      x.fillStyle="#E3EAF3";rr(x,X+130,y+4,w-210,30,15);x.fill();const g=x.createLinearGradient(0,y+4,0,y+34);g.addColorStop(0,"#BFE0FF");g.addColorStop(.5,"#5AA2EE");g.addColorStop(.52,"#3586E0");g.addColorStop(1,"#86C6FF");x.fillStyle=g;rr(x,X+130,y+4,(w-210)*v/5,30,15);x.fill();
+      txt(x,`${v}/5`,X+w,y+28,30,900,"#1C4689","right")})};
+  if(fmt==="story"){
+    txt(x,"오늘운",W/2,170,120,900,"#fff","center",["#1C4689",16]);
+    txt(x,date,W/2,240,38,800,"#fff","center",["rgba(28,70,137,.55)",3]);txt(x,ij,W/2,290,34,800,"#FFE3C2","center",["rgba(28,70,137,.55)",3]);
+    drawCardFace(x,c,W/2-190,340,380);
+    txt(x,D.title,W/2,1020,68,900,"#fff","center",["#1C4689",12]);
+    drawStars(x,F.total,W/2,1078,58);
+    x.fillStyle="rgba(255,255,255,.95)";rr(x,80,1140,920,560,36);x.fill();
+    bars(130,1180,820);
+    let y=1450;txt(x,"오늘의 미션",130,y,30,900,"#F59124");
+    wrapLines(x,D.mission,820,38,800).slice(0,2).forEach((l,i)=>txt(x,l,130,y+52+i*48,38,800,"#22324A"));
+    y=1610;txt(x,`행운의 색 ${D.color} · 방향 ${D.dir} · 숫자 ${D.num}`,130,y,32,800,"#2F6BC4");
+    txt(x,`12운성 「${D.stage}」 · ${D.stageShort}`,130,y+48,28,700,"#6B7280");
+    x.drawImage(mas,70,1700,210,194);
+    const say=G0.home(D.title,D.mission);x.fillStyle="#fff";rr(x,300,1730,700,120,28);x.fill();
+    wrapLines(x,say,640,28,800).slice(0,2).forEach((l,i)=>txt(x,l,330,1778+i*38,28,800,"#22324A"));
+    txt(x,"pong-83.github.io/oneul-un",W/2,1895,28,800,"rgba(255,255,255,.9)","center");
+  }else{
+    txt(x,"오늘운",80,130,90,900,"#fff","left",["#1C4689",13]);
+    txt(x,date,W-80,92,32,800,"#fff","right",["rgba(28,70,137,.55)",3]);txt(x,ij,W-80,136,30,800,"#FFE3C2","right",["rgba(28,70,137,.55)",3]);
+    drawCardFace(x,c,80,200,340);
+    const X=470;txt(x,D.title,X,268,54,900,"#fff","left",["#1C4689",10]);
+    drawStars(x,F.total,X+2*46*1.15+23,318,46);
+    x.fillStyle="rgba(255,255,255,.95)";rr(x,X-20,370,W-X-60,540,30);x.fill();
+    bars(X+10,400,W-X-110);
+    txt(x,"오늘의 미션",X+10,660,26,900,"#F59124");
+    wrapLines(x,D.mission,W-X-110,32,800).slice(0,2).forEach((l,i)=>txt(x,l,X+10,706+i*42,32,800,"#22324A"));
+    txt(x,`행운의 색 ${D.color} · 방향 ${D.dir}`,X+10,820,28,800,"#2F6BC4");txt(x,`행운의 숫자 ${D.num} · 「${D.stage}」`,X+10,862,28,800,"#2F6BC4");
+    x.drawImage(mas,80,780,190,176);
+    const say=G0.home(D.title,D.mission);wrapLines(x,say,330,24,800).slice(0,3).forEach((l,i)=>txt(x,l,90,990+i*32,24,800,"#fff","left",["rgba(28,70,137,.7)",4]));
+    txt(x,"pong-83.github.io/oneul-un",W-80,1045,24,800,"rgba(255,255,255,.9)","right");
+  }
+  return await new Promise(res=>cv.toBlob(b=>res(b),"image/png"));
+}
+async function openShare(fmt){
+  if(!compute()){toast("생년월일을 먼저 넣어주세요");return}
+  shareFmt=fmt||shareFmt;$("share").hidden=false;$("shMsg").textContent="이미지를 그리는 중…";
+  document.querySelectorAll("#shFmt button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fmt===shareFmt?"true":"false"));
+  const tok=++shareTok,blob=await makeShare(shareFmt);if(tok!==shareTok)return;shareBlob=blob;if(!shareBlob){$("shMsg").textContent="이미지를 만들지 못했어요";return}
+  const old=$("shImg").src;$("shImg").src=URL.createObjectURL(shareBlob);if(old&&old.startsWith("blob:"))URL.revokeObjectURL(old);
+  $("shMsg").textContent="";
+  const f=new File([shareBlob],`오늘운-${TODAY}.png`,{type:"image/png"});
+  $("shShare").hidden=!(navigator.canShare&&navigator.canShare({files:[f]}));
+}
+$("shFmt").onclick=ev=>{const b=ev.target.closest("[data-fmt]");if(b)openShare(b.dataset.fmt)};
+$("shClose").onclick=()=>{$("share").hidden=true};
+$("shSave").onclick=()=>{if(!shareBlob)return;const a=document.createElement("a");a.href=$("shImg").src;a.download=`오늘운-${TODAY}-${shareFmt==="story"?"스토리":"정사각"}.png`;document.body.appendChild(a);a.click();a.remove();
+  $("shMsg").textContent="저장을 시작했어요. 안 되면 이미지를 길게 누르거나 우클릭해서 저장하세요."};
+$("shShare").onclick=async()=>{try{await navigator.share({files:[new File([shareBlob],`오늘운-${TODAY}.png`,{type:"image/png"})],title:"오늘운",text:"오늘의 운세 ✦ pong-83.github.io/oneul-un"})}catch(e){}};
+$("shareBtn").onclick=()=>openShare();$("shareBtn2").onclick=()=>openShare();
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!$("share").hidden)$("share").hidden=true});
+
 /* ===== 화면 ===== */
 function go(s,opts={}){
   gi=todayGuide();paintGuide();
@@ -1155,7 +1282,7 @@ function renderHome(){
   $("hIj").textContent=ST[F.tj.s]+BR[F.tj.b];$("hIjK").textContent=`${STK[F.tj.s]}${BRK[F.tj.b]}일 · ${F.g1}`;
   $("hTitle").textContent=F.A[0];$("hText").textContent=F.A[1];
   $("hText2").textContent=F.D.inner;
-  $("hEnergy").textContent=`12운성 「${F.D.stage}」, ${F.D.stageShort}이에요. ${F.D.stageText}`;$("hYest").textContent=F.yLine;
+  $("hEnergy").textContent=`12운성 「${F.D.stage}」, ${F.D.stageShort}이에요. ${F.D.stageText}`;$("hYest").textContent=F.yLine;$("hMonth").textContent=F.D.monthLine;
   $("hRelW").hidden=!F.rel;$("hRel").textContent=F.rel;
   fillBars($("hBars"),[["총운",F.total*20,F.total+"/5"],["재물운",F.sc[0]*20,F.sc[0]+"/5"],["애정운",F.sc[1]*20,F.sc[1]+"/5"],["일·학업",F.sc[2]*20,F.sc[2]+"/5"]]);
   $("hMission").textContent=`오늘의 미션: ${F.A[4]}`;
@@ -1186,6 +1313,7 @@ function renderCards(){
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>{deck.classList.add("dealt");setTimeout(()=>deck.classList.add("ready"),900)}));
   $("cHint").textContent=picked?"오늘은 이미 카드를 골랐어요. 빛나는 카드를 누르면 해설로 가요.":view==="grid"?"카드가 바닥에 깔려 있어요. 하나를 눌러 뒤집어 보세요.":"옆으로 넘기면서 마음이 가는 카드를 골라요.";
+  if(!picked&&luckyNum())$("cHint").textContent+=` 오늘 행운의 숫자는 ${luckyNum()}이니, ${luckyNum()}번째 카드부터 살펴봐도 좋아요.`;
   say($("cSay"),G().cards);
   $("cAfter").innerHTML=picked?`<button class="gloss acc lg" data-go="detail">${CARDS[e.card][1]} 카드 해설 보기 ▶</button>`:"";
 }
