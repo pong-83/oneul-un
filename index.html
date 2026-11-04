@@ -401,6 +401,12 @@ button.day:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(31,78,156,
 .share{position:fixed;inset:0;z-index:68;display:grid;place-items:center;padding:16px;background:rgba(10,22,48,.55);overflow:auto;animation:fadeIn .25s ease both}
 .share-box{width:100%;max-width:440px;background:#fff;border:1px solid #6B87AE;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:winIn .4s cubic-bezier(.3,1.4,.5,1) both}
 .share-body{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+#hCta{flex-direction:column;align-items:stretch}
+#hCta > .txt{margin:0}
+#hCta > .ctab{align-self:center}
+.ctarow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ctarow.one{grid-template-columns:1fr}
+.ctarow .gloss{width:100%;justify-content:center;padding-left:10px;padding-right:10px;white-space:nowrap}
 .shopts{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px}
 .swatches{display:flex;gap:14px}
 .swatches button{border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;font:700 11px var(--f-disp);color:#7A8597;cursor:pointer}
@@ -604,7 +610,6 @@ img{max-width:100%}
           </div>
         </div>
         <div class="pad cta" id="hCta"></div>
-        <div class="pad cta"><button class="gloss gray" id="shareBtn" type="button">📷 오늘 운세 공유 이미지</button></div>
       </div>
     </section>
 
@@ -1559,7 +1564,7 @@ $("shShare").onclick=async()=>{if(!shareBlob)return;const f=new File([shareBlob]
   if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:"오늘운",text:"오늘의 운세 ✦ pong-83.github.io/oneul-un"});msg("보냈어요 ✦")}catch(e){msg("")}return}
   try{await navigator.clipboard.write([new ClipboardItem({"image/png":shareBlob})]);msg("이미지를 복사했어요. 대화창에 붙여넣으면 돼요 ✦");return}catch(e){}
   try{await navigator.clipboard.writeText("오늘의 운세 ✦ https://pong-83.github.io/oneul-un");msg("링크를 복사했어요. 이미지는 저장해서 함께 보내주세요")}catch(e){msg("여기서는 보내기가 막혀 있어요. 이미지를 저장해서 보내주세요")}};
-$("shareBtn").onclick=()=>openShare();$("shareBtn2").onclick=()=>openShare();
+document.addEventListener("click",ev=>{if(ev.target.closest("[data-share]"))openShare()});$("shareBtn2").onclick=()=>openShare();
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!$("share").hidden)$("share").hidden=true});
 
 /* ===== 화면 ===== */
@@ -1591,8 +1596,8 @@ function renderHome(){
   say($("hSay"),G().home(F.A[0],F.A[4]));
   $("stampBtn").setAttribute("aria-pressed",e.mission?"true":"false");$("stampTxt").textContent=e.mission?"미션 완료! 도장 꾹":"미션 완료 도장 찍기";
   const c=e.card!=null?CARDS[e.card]:null;
-  $("hCta").innerHTML=c?`<div class="row"><p class="txt">오늘 고른 카드는 <span class="lb">${c[3]} ${c[1]}</span></p><button class="gloss acc" data-go="detail">카드 해설 보기 ▶</button></div>`
-    :`<button class="ctab" data-go="cards"><span class="minis" aria-hidden="true"><i class="cb"></i><i class="cb"></i><i class="cb"></i></span><span class="lbl">오늘의 카드 뽑으러 가기</span><span class="spk" aria-hidden="true">✦</span></button>`;
+  $("hCta").innerHTML=c?`<p class="txt">오늘 고른 카드는 <span class="lb">${c[3]} ${c[1]}</span></p><div class="ctarow"><button class="gloss acc" data-go="detail">카드 해설 보기 ▶</button><button class="gloss gray" id="shareBtn" data-share type="button">📷 공유 이미지</button></div>`
+    :`<button class="ctab" data-go="cards"><span class="minis" aria-hidden="true"><i class="cb"></i><i class="cb"></i><i class="cb"></i></span><span class="lbl">오늘의 카드 뽑으러 가기</span><span class="spk" aria-hidden="true">✦</span></button><div class="ctarow one"><button class="gloss gray" id="shareBtn" data-share type="button">📷 오늘 운세 공유 이미지</button></div>`;
 }
 function cardFace(ci){const c=CARDS[ci];return`<div class="ci"><div class="cf cb"></div><div class="cf cfr"><span class="ring"></span><i class="s s1">✦</i><i class="s s2">✦</i><i class="s s3">✦</i><i class="s s4">✦</i><div class="num">${c[0]}</div>${c[7]!=null?`<div class="orb"><svg class="suit" viewBox="0 0 28 28" aria-hidden="true"><use href="#suit${c[7]}"/></svg></div>`:`<div class="orb"><span class="gly">${c[3]}</span></div>`}<div class="nm"><small>${c[2]}</small><b>${c[1]}</b></div><span class="holo"></span><span class="glare"></span></div></div>`}
 function renderCards(){
