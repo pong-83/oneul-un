@@ -226,19 +226,29 @@ select{appearance:none;-webkit-appearance:none;padding-right:28px;font-weight:70
 .cb{border:2px solid #fff;outline:1px solid #2F6BC4;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.35) 0 18%,transparent 19%),radial-gradient(circle at 50% 50%,transparent 0 26%,rgba(255,255,255,.55) 27% 29%,transparent 30%),linear-gradient(180deg,#9CC6F5 0%,#5B97E3 48%,#3E7FD6 52%,#2F6BC4 100%);box-shadow:0 4px 8px rgba(31,78,156,.3)}
 .cb::before{content:"★";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:1.1em;text-shadow:0 0 6px #fff}
 .cb::after{content:"";position:absolute;left:0;right:0;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.1))}
-.cfr{transform:rotateY(180deg);container-type:size;border:2px solid #5B97E3;box-shadow:0 4px 10px rgba(31,78,156,.3);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8cqw 0 9cqw;background:radial-gradient(circle at 50% 44%,#FFFFFF 0 26%,#EEF5FE 52%,#D3E5FB 100%)}
-.cfr::before{content:"";position:absolute;inset:4cqw;border:1px solid #A9CDF5;border-radius:5cqw;pointer-events:none}
-.cfr .ring{display:none}
-.cfr .orb::before{content:"";position:absolute;inset:-15cqw;border-radius:50%;z-index:-1;pointer-events:none;background:repeating-conic-gradient(rgba(91,151,227,.5) 0 1.4deg,transparent 1.4deg 15deg);-webkit-mask:radial-gradient(circle closest-side,transparent 0 78%,#000 79% 92%,transparent 93%);mask:radial-gradient(circle closest-side,transparent 0 78%,#000 79% 92%,transparent 93%)}
-.cfr .orb::after{content:"";position:absolute;inset:-8cqw;border-radius:50%;z-index:-1;border:1px dashed rgba(91,151,227,.55);pointer-events:none}
-.cfr .num{position:relative;flex:none;font-family:var(--f-latin);font-weight:700;font-size:8cqw;line-height:1;color:var(--o5);padding:1.6cqw 6cqw;border-radius:99px;border:1px solid var(--o4);background:linear-gradient(180deg,#FFE9CC 0%,#FFC27A 48%,#F59124 52%,#FFB360 100%)}
-.cfr .orb{position:relative;flex:none;width:44cqw;height:44cqw;border-radius:50%;display:grid;place-items:center;border:1.4cqw solid #fff;background:radial-gradient(circle at 34% 28%,#fff 0 7%,#A9CDF5 26%,#4F8EDD 62%,#2F6BC4 100%);box-shadow:0 1.6cqw 4cqw rgba(31,78,156,.35),inset 0 -3cqw 5cqw rgba(0,0,0,.18)}
-.cfr .gly{font-size:24cqw;line-height:1;color:#fff;text-shadow:0 0 3cqw rgba(255,255,255,.9),0 .6cqw 0 rgba(28,70,137,.5)}
-.cfr .nm{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;gap:1.5cqw;max-width:92cqw}
-.cfr .nm small{font-family:var(--f-latin);font-weight:700;font-size:5.6cqw;letter-spacing:.06em;color:var(--b4);text-transform:uppercase;white-space:nowrap}
-.cfr .nm b{font-family:var(--f-disp);font-weight:900;font-size:10cqw;line-height:1.2;color:#fff;white-space:nowrap;padding:1.6cqw 9cqw;clip-path:polygon(0 0,100% 0,93% 50%,100% 100%,0 100%,7% 50%);background:linear-gradient(180deg,#A9CDF5 0%,#5B97E3 48%,#3E7FD6 52%,#5C9BEA 100%);text-shadow:0 .4cqw 0 rgba(28,70,137,.6)}
-.cfr .s{position:absolute;font-style:normal;font-size:6cqw;color:#5B97E3;line-height:1}
+.cfr{transform:rotateY(180deg);container-type:size;overflow:hidden;border:2px solid #5B97E3;box-shadow:0 4px 10px rgba(31,78,156,.25);background:linear-gradient(170deg,#FFFFFF 0%,#F3F8FE 55%,#E2EEFC 100%)}
+.cfr::before{content:"";position:absolute;inset:4cqw;border:1px solid #BFD6F3;border-radius:5cqw;pointer-events:none}
+.cfr .ring{position:absolute;left:50%;top:46%;width:78cqw;height:78cqw;margin:-39cqw 0 0 -39cqw;border-radius:50%;pointer-events:none;background:repeating-conic-gradient(rgba(91,151,227,.5) 0 1.4deg,transparent 1.4deg 15deg);-webkit-mask:radial-gradient(circle closest-side,transparent 0 82%,#000 83% 95%,transparent 96%);mask:radial-gradient(circle closest-side,transparent 0 82%,#000 83% 95%,transparent 96%);animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cfr .num{position:absolute;top:8%;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3cqw;font-family:var(--f-latin);font-weight:700;font-size:7cqw;letter-spacing:.16em;color:#2F6BC4}
+.cfr .num::before,.cfr .num::after{content:"";width:9cqw;height:1px;background:#A9CDF5}
+.cfr .orb{position:absolute;left:50%;top:46%;width:48cqw;height:48cqw;margin:-24cqw 0 0 -24cqw;border-radius:50%;display:grid;place-items:center;background:linear-gradient(160deg,#8FC0F2 0%,#4F8EDD 55%,#2F6BC4 100%);box-shadow:0 0 0 1.8cqw #fff,0 0 0 2.4cqw #BFD6F3}
+.cfr .gly{font-size:22cqw;line-height:1;color:#fff}
+.cfr .nm{position:absolute;left:0;right:0;bottom:8%;display:flex;flex-direction:column;align-items:center;gap:1.6cqw}
+.cfr .nm small{font-family:var(--f-latin);font-weight:700;font-size:5.2cqw;letter-spacing:.12em;color:#5B97E3;text-transform:uppercase;white-space:nowrap}
+.cfr .nm b{font-family:var(--f-disp);font-weight:900;font-size:10cqw;line-height:1.15;color:#1C4689;white-space:nowrap}
+.cfr .nm b::after{content:"";display:block;width:8cqw;height:.9cqw;margin:1.6cqw auto 0;border-radius:99px;background:#F59124}
+.cfr .s{position:absolute;font-style:normal;font-size:5.5cqw;color:#A9CDF5;line-height:1}
 .cfr .s1{left:8cqw;top:8cqw}.cfr .s2{right:8cqw;top:8cqw}.cfr .s3{left:8cqw;bottom:8cqw}.cfr .s4{right:8cqw;bottom:8cqw}
+.cfr .holo,.cfr .glare{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s}
+.cfr .holo{mix-blend-mode:color-dodge;background:linear-gradient(115deg,transparent 22%,rgba(255,170,90,.45) 36%,rgba(120,210,255,.5) 50%,rgba(200,150,255,.45) 64%,transparent 78%);background-size:260% 260%;background-position:var(--hx,50%) var(--hy,50%)}
+.cfr .glare{mix-blend-mode:soft-light;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.95),rgba(255,255,255,0) 50%)}
+.big.active .holo,.big.active .glare{opacity:1}
+.glow{perspective:900px;animation:bob 3s ease-in-out infinite}
+.big{animation:none!important;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s cubic-bezier(.3,1.5,.5,1);touch-action:none;cursor:grab}
+.big.active{transition:transform .08s linear}
+.big .ci{transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.tilt-hint{text-align:center;margin-top:10px}
 .deck .c{font-size:16px}
 .ctrl{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .seg{display:inline-flex;border:1px solid #9DA3AC;border-radius:99px;overflow:hidden}
@@ -522,7 +532,7 @@ img{max-width:100%}
       <div class="stack">
         <div class="sh"><div class="tab"><b id="dHead"></b><span>카드 해설</span></div><div class="bar"><b id="dBar"></b><span id="dBar2"></span></div></div>
         <div class="side pad">
-          <div class="glow"><div class="big flip" id="bigCard"></div></div>
+          <div><div class="glow"><div class="big flip" id="bigCard"></div></div><p class="small tilt-hint">살살 움직이면 반짝, 톡 누르면 뒤집혀요</p></div>
           <div style="min-width:0">
             <h2 class="h" id="dTitle"></h2>
             <p class="txt" style="margin-top:10px"><span class="lb">키워드:</span><span id="dKw"></span></p>
@@ -839,7 +849,7 @@ function renderHome(){
   $("hCta").innerHTML=c?`<div class="row"><p class="txt">오늘 고른 카드는 <span class="lb">${c[3]} ${c[1]}</span></p><button class="gloss acc" data-go="detail">카드 해설 보기 ▶</button></div>`
     :`<button class="ctab" data-go="cards"><span class="minis" aria-hidden="true"><i class="cb"></i><i class="cb"></i><i class="cb"></i></span><span class="lbl">오늘의 카드 뽑으러 가기</span><span class="spk" aria-hidden="true">✦</span></button>`;
 }
-function cardFace(ci){const c=CARDS[ci];return`<div class="ci"><div class="cf cb"></div><div class="cf cfr"><span class="ring"></span><i class="s s1">✦</i><i class="s s2">✦</i><i class="s s3">✦</i><i class="s s4">✦</i><div class="num">${c[0]}</div><div class="orb"><span class="gly">${c[3]}</span></div><div class="nm"><small>${c[2]}</small><b>${c[1]}</b></div></div></div>`}
+function cardFace(ci){const c=CARDS[ci];return`<div class="ci"><div class="cf cb"></div><div class="cf cfr"><span class="ring"></span><i class="s s1">✦</i><i class="s s2">✦</i><i class="s s3">✦</i><i class="s s4">✦</i><div class="num">${c[0]}</div><div class="orb"><span class="gly">${c[3]}</span></div><div class="nm"><small>${c[2]}</small><b>${c[1]}</b></div><span class="holo"></span><span class="glare"></span></div></div>`}
 function renderCards(){
   const deck=$("deck"),e=state.days[TODAY]||{},picked=e.card!=null;
   deck.className="deck"+(view==="row"?" row":"");
@@ -867,12 +877,25 @@ function pick(btn,ci){
   btn.classList.add("flip");toast(`${CARDS[ci][3]} ${CARDS[ci][1]} 카드가 나왔어요!`);
   setTimeout(()=>go("detail"),1200);
 }
+function bindTilt(el){
+  if(el.dataset.tilt)return;el.dataset.tilt="1";
+  const set=(k,v)=>el.style.setProperty(k,v);
+  const move=e=>{const r=el.getBoundingClientRect(),x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));
+    el.classList.add("active");set("--ry",((x-.5)*30)+"deg");set("--rx",((.5-y)*30)+"deg");
+    const fx=el.classList.contains("flip")?1-x:x;set("--mx",fx*100+"%");set("--my",y*100+"%");set("--hx",fx*100+"%");set("--hy",y*100+"%")};
+  const leave=()=>{el.classList.remove("active");set("--rx","0deg");set("--ry","0deg")};
+  let down=0,dx=0,dy=0;
+  el.addEventListener("pointerdown",e=>{down=Date.now();dx=e.clientX;dy=e.clientY;move(e)});
+  el.addEventListener("pointermove",move);
+  el.addEventListener("pointerleave",leave);
+  el.addEventListener("pointerup",e=>{if(Date.now()-down<300&&Math.hypot(e.clientX-dx,e.clientY-dy)<8)el.classList.toggle("flip");if(e.pointerType!=="mouse")leave()});
+}
 function renderDetail(){
   const e=state.days[TODAY];if(!e||e.card==null){go("cards");return}
   F=compute();const c=CARDS[e.card];
   $("dHead").textContent=`${c[0]} · ${c[1]} (◕ᴗ◕✿)`;
   $("dBar").textContent=`${c[2]} ◦ ${c[4]}`;$("dBar2").textContent=`${now.getMonth()+1}월 ${now.getDate()}일에 고른 카드`;
-  const big=$("bigCard");big.innerHTML=cardFace(e.card);big.classList.remove("flip");requestAnimationFrame(()=>requestAnimationFrame(()=>big.classList.add("flip")));
+  const big=$("bigCard");bindTilt(big);big.innerHTML=cardFace(e.card);big.classList.remove("flip");requestAnimationFrame(()=>requestAnimationFrame(()=>big.classList.add("flip")));
   $("dTitle").textContent=c[1];$("dKw").textContent=c[4];$("dMean").textContent=c[5];$("dAdv").textContent=c[6];
   $("dMix").textContent=`사주로 본 오늘은 「${F.A[0]}」, 카드는 「${c[4]}」. 두 흐름을 함께 기억해 보세요.`;
   $("dMis").textContent=`오늘의 미션: ${F.A[4]}`;
