@@ -220,6 +220,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:28px;font-weight:70
 .deck.ready .c:not(:disabled):hover,.deck.ready .c:focus-visible{transform:translateY(-10px) scale(1.04)}
 .c:disabled{cursor:default}
 .deck .c.dim{opacity:.35}
+.deck .c.chosen{z-index:3}
+.deck .c.chosen .cb{box-shadow:0 0 0 2px #fff,0 0 0 4px #F59124,0 0 18px rgba(245,145,36,.65)}
+.deck .c.chosen::after{content:"오늘";position:absolute;left:50%;top:-10px;transform:translateX(-50%);font-family:var(--f-disp);font-weight:900;font-size:10px;line-height:1;color:#6A3300;padding:3px 7px;border-radius:99px;border:1px solid #C9701A;background:linear-gradient(180deg,#FFE9CC 0%,#FFC27A 48%,#F59124 52%,#FFB360 100%);white-space:nowrap}
+.deck.ready .c.chosen{animation:glowpulse 2s ease-in-out infinite}
+@keyframes glowpulse{50%{transform:translateY(-4px)}}
+.deck .c.lift{animation:lift .9s cubic-bezier(.3,1.5,.5,1) forwards!important}
+@keyframes lift{0%{transform:none}45%{transform:translateY(-26px) scale(1.18) rotate(-3deg)}100%{transform:translateY(-16px) scale(1.12)}}
 .ci{position:absolute;inset:0;transition:transform .8s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
 .c.flip .ci,.big.flip .ci{transform:rotateY(180deg)}
 .cf{position:absolute;inset:0;border-radius:8px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
@@ -861,7 +868,7 @@ function renderCards(){
     const b=document.createElement("button");b.type="button";b.className="c";
     b.style.setProperty("--d",`${i*.03}s`);b.innerHTML=cardFace(ci);
     b.setAttribute("aria-label",picked&&ci===e.card?`오늘의 카드 ${CARDS[ci][1]}`:`${i+1}번째 카드`);
-    if(picked){b.disabled=ci!==e.card;if(ci===e.card){b.classList.add("flip");b.onclick=()=>go("detail")}else b.classList.add("dim")}
+    if(picked){b.disabled=ci!==e.card;if(ci===e.card){b.classList.add("chosen");b.onclick=()=>go("detail")}else b.classList.add("dim")}
     else b.onclick=()=>pick(b,ci);
     deck.appendChild(b);
   });
@@ -874,7 +881,7 @@ function pick(btn,ci){
   const e=today();if(e.card!=null)return;
   e.card=ci;save();
   document.querySelectorAll("#deck .c").forEach(b=>{b.disabled=true;if(b!==btn)b.classList.add("dim")});
-  btn.classList.add("flip");toast(`${CARDS[ci][3]} ${CARDS[ci][1]} 카드가 나왔어요!`);
+  btn.classList.add("chosen","lift");toast(`${CARDS[ci][3]} ${CARDS[ci][1]} 카드가 나왔어요!`);
   setTimeout(()=>go("detail"),1200);
 }
 function bindTilt(el){
