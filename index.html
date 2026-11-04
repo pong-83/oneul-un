@@ -945,7 +945,10 @@ const GUIDES=[
  {name:"아기 탕건",greet:"안뇽하세여! 저는 아기 탕건이에여 (◍•ᴗ•◍)<br>운세 봐드릴게여!",birth:"생일 알려주세여!<br>시간도여!",home:(t,m)=>`오늘은 「${t}」이래여! ${m}, 꼭 해여!`,cards:"카드 골라주세여! 두근두근!",detail:(n,k)=>`우와 ${n} 카드다! 「${k}」래여!`,stamp:"도장 쾅쾅! 잘했어여 (≧▽≦)"},
  {name:"할아버지 도사",greet:"허허, 어서 오너라.<br>이 늙은 도사가 운을 봐주마.",birth:"태어난 해와 달,<br>날과 시를 말해 보거라.",home:(t,m)=>`허허, 오늘은 「${t}」이로구나. ${m}, 해보거라.`,cards:"서두르지 말고, 마음 가는 패를 집어 보거라.",detail:(n,k)=>`허허, ${n} 패로구나. 「${k}」를 잊지 말거라.`,stamp:"옳거니! 장하구나, 도장을 찍었느니라."},
  {name:"갓냥",greet:"냥! 나는 갓냥이다냥 =^･ω･^=<br>운세는 맡겨달라냥!",birth:"생일 알려달라냥!<br>시간도 알면 더 좋다냥.",home:(t,m)=>`오늘은 「${t}」다냥! ${m}, 하라냥~`,cards:"맘에 드는 카드 꾹 누르라냥!",detail:(n,k)=>`${n} 카드다냥! 「${k}」를 기억하라냥.`,stamp:"도장 꾹! 츄르 하나 줘도 된다냥 =^･ω･^="}];
-let gi=Math.floor(Math.random()*GUIDES.length);
+let gi=0;
+function daysSince(){return Math.round((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-Date.UTC(1900,0,1))/864e5)}
+function todayGuide(){if(state&&state.guide&&state.guide.d===TODAY)return state.guide.g;return daysSince()%GUIDES.length}
+function luckyNum(){let k=daysSince();if(state&&state.birth){const [y,m,d]=state.birth.date.split("-").map(Number),h=state.birth.time?Number(state.birth.time.split(":")[0]):null;k+=saju(y,m,d,h).day.s*7+3}return (k%9)+1}
 const G=()=>GUIDES[gi];
 const nextGuide=()=>{gi=(gi+1)%GUIDES.length};
 function paintGuide(){document.querySelectorAll(".mascot use,.peek use").forEach(u=>u.setAttribute("href","#g"+gi))}
@@ -984,7 +987,7 @@ $("shuffleBtn").onclick=()=>{const d=$("deck");d.dataset.order="";renderCards();
 /* ===== 캐릭터 톡 누르기 ===== */
 const POKE=[
  {fx:["✦","★","✧"],col:["#F59124","#5B97E3"],anim:[{transform:"none"},{transform:"translateY(-16px) rotate(-10deg)"},{transform:"translateY(0) rotate(8deg)"},{transform:"none"}],
-  lines:n=>["히히 간지러워!",`오늘 행운의 숫자는 ${n}이야!`,"별 지팡이 한 번 휘둘러줄게 ✦","미션 했어? 같이 하자!","계속 누르면 친구 불러온다?"]},
+  lines:n=>["히히 간지러워!",`오늘 행운의 숫자는 ${n}이야!`,"별 지팡이 한 번 휘둘러줄게 ✦","미션 했어? 같이 하자!","다섯 번 누르면 오늘 안내를 친구한테 넘길게!"]},
  {fx:["♪","~","♪"],col:["#5B97E3","#F59124"],anim:[{transform:"none"},{transform:"rotate(16deg) translateY(5px)"},{transform:"rotate(16deg) translateY(5px)"},{transform:"none"}],
   lines:n=>["어허, 갓이 비뚤어지오.",`오늘 그대의 행운의 수는 ${n}이오.`,"부채 바람이 시원하오?","예를 갖추시오… 하하, 농이오.","자꾸 누르면 다른 이를 부르겠소."]},
  {fx:["z","Z","z"],col:["#5B97E3","#A9CDF5"],anim:[{transform:"none"},{transform:"translateY(-24px) scale(1.06)"},{transform:"translateY(-18px) scale(1.04)"},{transform:"none"}],
@@ -1015,14 +1018,14 @@ function tapSay(el,html){
 }
 function poke(el){
   const P=POKE[gi],r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
-  const n=((now.getDate()*7+now.getMonth()*3+gi*5)%9)+1;
+  const n=luckyNum();
   if(!reduceMotion())el.animate(P.anim,{duration:gi===3?700:gi===2?900:560,easing:"cubic-bezier(.3,1.4,.5,1)"});
   burst(cx,cy,P.fx,P.col,false);
   const t=Date.now();pokeTimes=pokeTimes.filter(x=>t-x<2500);pokeTimes.push(t);
   if(pokeTimes.length>=5){pokeTimes=[];
     burst(cx,cy+10,["☁","☁","✦"],["#FFFFFF","#A9CDF5","#F59124"],true);
     if(sayEl){sayEl.remove();sayEl=null}
-    setTimeout(()=>{const cur=document.querySelector(".screen.on");if(cur&&!$("app").hidden)go(cur.dataset.s,{stay:true});else{nextGuide();paintGuide()}
+    setTimeout(()=>{nextGuide();state.guide={d:TODAY,g:gi};save();const cur=document.querySelector(".screen.on");if(cur&&!$("app").hidden)go(cur.dataset.s,{stay:true});else{if(!$("onboard").hidden)renderOb();paintGuide()}
       toast(`펑! ${G().name} 등장 (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧`)},250);
     return}
   const L=P.lines(n);pokeLine[gi]=((pokeLine[gi]??-1)+1)%L.length;
@@ -1035,7 +1038,7 @@ document.addEventListener("click",ev=>{
 
 /* ===== 화면 ===== */
 function go(s,opts={}){
-  nextGuide();paintGuide();
+  gi=todayGuide();paintGuide();
   document.querySelectorAll(".screen").forEach(el=>el.classList.toggle("on",el.dataset.s===s));
   document.querySelectorAll(".nav [data-go]").forEach(b=>b.classList.toggle("acc",b.dataset.go===(s==="detail"?"cards":s)));
   if(s==="home")renderHome();if(s==="cards")renderCards();if(s==="detail")renderDetail();if(s==="saju")renderSaju();if(s==="record")renderRecord();
@@ -1057,7 +1060,7 @@ function renderHome(){
   $("hRelW").hidden=!F.rel;$("hRel").textContent=F.rel;
   fillBars($("hBars"),[["총운",F.total*20,F.total+"/5"],["재물운",F.sc[0]*20,F.sc[0]+"/5"],["애정운",F.sc[1]*20,F.sc[1]+"/5"],["일·학업",F.sc[2]*20,F.sc[2]+"/5"]]);
   $("hMission").textContent=`오늘의 미션: ${F.A[4]}`;
-  $("hLucky").textContent=`행운의 색 ${LC[F.min]}, 행운의 방향 ${LD[F.min]}`;
+  $("hLucky").textContent=`행운의 색 ${LC[F.min]}, 행운의 방향 ${LD[F.min]}, 행운의 숫자 ${luckyNum()}`;
   say($("hSay"),G().home(F.A[0],F.A[4]));
   $("stampBtn").setAttribute("aria-pressed",e.mission?"true":"false");$("stampTxt").textContent=e.mission?"미션 완료! 도장 꾹":"미션 완료 도장 찍기";
   const c=e.card!=null?CARDS[e.card]:null;
@@ -1185,7 +1188,7 @@ function renderRecord(){
 /* ===== 온보딩 ===== */
 let ob=0;
 const OB=[
- ()=>`<div class="step"><div class="speak"><svg class="mascot" viewBox="0 0 130 120" aria-hidden="true"><use href="#g${gi}"/></svg><div class="bubbletxt">${G().greet}<span class="small" style="display:block;margin-top:4px">— ${G().name}</span></div></div><p class="txt">갓 쓴 여섯 친구가 날마다, 화면마다 번갈아 나와요. 오늘운은 사주로 하루의 흐름을 읽고, 타로 한 장으로 마음을 비춰보고, 작은 미션으로 하루를 바꿔보는 앱이에요.</p></div>`,
+ ()=>`<div class="step"><div class="speak"><svg class="mascot" viewBox="0 0 130 120" aria-hidden="true"><use href="#g${gi}"/></svg><div class="bubbletxt">${G().greet}<span class="small" style="display:block;margin-top:4px">— ${G().name}</span></div></div><p class="txt">갓 쓴 여섯 친구 중 한 명이 날마다 그날의 안내 친구가 돼요. 오늘운은 사주로 하루의 흐름을 읽고, 타로 한 장으로 마음을 비춰보고, 작은 미션으로 하루를 바꿔보는 앱이에요.</p></div>`,
  ()=>`<div class="step"><h2 class="h">이렇게 써요</h2><div class="how"><div><b>柱</b><p><b style="all:unset;font-weight:800">사주 보기</b><br><span class="small">생년월일시로 내 여덟 글자를 계산하고, 오늘의 일진과 비교해요.</span></p></div><div><b>☆</b><p><b style="all:unset;font-weight:800">카드 한 장</b><br><span class="small">78장 덱에서 펼친 카드 중 하나를 골라 해설을 들어요.</span></p></div><div><b>完</b><p><b style="all:unset;font-weight:800">미션과 도장</b><br><span class="small">미션을 끝내면 도장, 저녁엔 맞았는지 한 줄 기록.</span></p></div></div></div>`,
  ()=>`<div class="step"><div class="speak"><svg class="mascot" viewBox="0 0 130 120" aria-hidden="true"><use href="#g${gi}"/></svg><div class="bubbletxt">${G().birth}<span class="small" style="display:block;margin-top:4px">— ${G().name}</span></div></div>
   <form class="bform" id="bf" onsubmit="return false">
@@ -1195,7 +1198,7 @@ const OB=[
   <div class="fnote"><span>음력 생일은 양력으로 바꿔 넣어주세요 · 정보는 이 브라우저에만 저장돼요</span><button class="textlink" id="obDemo" type="button">예시로 둘러보기 →</button></div></div>`
 ];
 function renderOb(){
-  nextGuide();
+  gi=todayGuide();
   $("obBody").innerHTML=OB[ob]();
   document.querySelectorAll("#obDots i").forEach((d,i)=>d.classList.toggle("on",i===ob));
   const canCancel=obFromApp&&ob===2;
@@ -1232,11 +1235,11 @@ function finishOb(demo){
 $("obNext").onclick=()=>{if(ob<2){ob++;renderOb()}else finishOb(false)};
 $("obBack").onclick=()=>{if(obFromApp&&ob===2){obFromApp=false;$("onboard").hidden=true;$("app").hidden=false;go("saju");return}if(ob>0){ob--;renderOb()}};
 $("obSkip").onclick=()=>{if(ob<2){ob=2;renderOb()}else toast("생년월일만 고르면 끝이에요! 모르면 '예시로 둘러보기'도 있어요")};
-$("obHelp").onclick=()=>toast(["갓 쓴 친구들이 화면마다 번갈아 나와서 운세를 알려줘요","사주, 카드, 미션 세 가지만 기억하면 돼요","시각을 모르면 '모름'을 골라도 괜찮아요"][ob]);
+$("obHelp").onclick=()=>toast(["날마다 갓 쓴 친구 한 명이 하루 내내 운세를 안내해요","사주, 카드, 미션 세 가지만 기억하면 돼요","시각을 모르면 '모름'을 골라도 괜찮아요"][ob]);
 
 /* ===== 스플래시 ===== */
 function splash(){
-  const sp=$("splash");sp.classList.remove("out");sp.hidden=false;paintGuide();
+  const sp=$("splash");sp.classList.remove("out");sp.hidden=false;gi=todayGuide();paintGuide();
   sp.querySelectorAll(".sc").forEach(b=>b.remove());
   const W=innerWidth,H=innerHeight;
   for(let i=0;i<9;i++){const off=i-4,c=document.createElement("span");c.className="sc cb";c.setAttribute("aria-hidden","true");
