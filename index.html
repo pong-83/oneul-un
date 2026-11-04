@@ -392,6 +392,12 @@ button.day:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(31,78,156,
 .bigseal{position:absolute;top:-9px;left:50%;transform:translateX(-50%);z-index:2;padding:1px 6px;border-radius:99px;white-space:nowrap;font-family:var(--f-disp);font-weight:900;font-size:.55rem;line-height:1.4;color:#6A3300;border:1px solid #C9701A;background:linear-gradient(180deg,#FFE9CC 0%,#FFC27A 48%,#F59124 52%,#FFB360 100%);pointer-events:none}
 .cal{padding-top:6px}
 @media (max-width:400px){.cele-friends svg{width:44px;height:41px}}
+.app-mascot-hit,.frame .mascot,.frame .peek,.onboard .mascot{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tapsay{position:fixed;z-index:65;max-width:220px;background:#fff;border:2px solid var(--b3);border-radius:14px;padding:8px 12px;font-family:var(--f-disp);font-weight:800;font-size:.84rem;line-height:1.45;color:#2B2F36;box-shadow:0 6px 16px rgba(31,78,156,.2);pointer-events:none;animation:sayIn .3s cubic-bezier(.3,1.5,.5,1) both}
+.tapsay::after{content:"";position:absolute;left:var(--tx,50%);bottom:-9px;margin-left:-7px;border:7px solid transparent;border-bottom:0;border-top-color:var(--b3)}
+.tapsay.below::after{bottom:auto;top:-9px;border-top:0;border-bottom:7px solid var(--b3)}
+.tapsay .who{display:block;font-size:.7rem;color:var(--muted);margin-top:1px}
+.pk{position:fixed;z-index:66;pointer-events:none;font-family:var(--f-disp);font-weight:900;line-height:1;text-shadow:0 1px 0 #fff}
 .toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:#fff;border:2px solid var(--o3);border-radius:12px;padding:10px 16px;font-family:var(--f-disp);box-shadow:0 8px 24px rgba(31,78,156,.3);animation:toast .4s cubic-bezier(.3,1.5,.5,1)}
 @keyframes toast{from{transform:translate(-50%,40px);opacity:0}}
 @media (max-width:420px){.side{grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:12px}.h{font-size:1.1rem}.brand{font-size:1.25rem}.nav button{font-size:.82rem}.sh .tab span{display:none}.ch b{font-size:1.8rem}.c{width:calc((100% - 24px)/4)}.deck{gap:8px}}
@@ -973,6 +979,59 @@ $("celeClose").onclick=closeCele;
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!$("cele").hidden)closeCele()});
 $("celePreview").onclick=()=>celebrate(7);
 $("shuffleBtn").onclick=()=>{const d=$("deck");d.dataset.order="";renderCards();toast("카드를 다시 섞었어요 ↻")};
+
+
+/* ===== 캐릭터 톡 누르기 ===== */
+const POKE=[
+ {fx:["✦","★","✧"],col:["#F59124","#5B97E3"],anim:[{transform:"none"},{transform:"translateY(-16px) rotate(-10deg)"},{transform:"translateY(0) rotate(8deg)"},{transform:"none"}],
+  lines:n=>["히히 간지러워!",`오늘 행운의 숫자는 ${n}이야!`,"별 지팡이 한 번 휘둘러줄게 ✦","미션 했어? 같이 하자!","계속 누르면 친구 불러온다?"]},
+ {fx:["♪","~","♪"],col:["#5B97E3","#F59124"],anim:[{transform:"none"},{transform:"rotate(16deg) translateY(5px)"},{transform:"rotate(16deg) translateY(5px)"},{transform:"none"}],
+  lines:n=>["어허, 갓이 비뚤어지오.",`오늘 그대의 행운의 수는 ${n}이오.`,"부채 바람이 시원하오?","예를 갖추시오… 하하, 농이오.","자꾸 누르면 다른 이를 부르겠소."]},
+ {fx:["z","Z","z"],col:["#5B97E3","#A9CDF5"],anim:[{transform:"none"},{transform:"translateY(-24px) scale(1.06)"},{transform:"translateY(-18px) scale(1.04)"},{transform:"none"}],
+  lines:n=>["으앗… 깼다…",`행운의 숫자… ${n}… 이었나… zzz`,"구름은… 눌러도… 폭신해…","오 분만… 더 잘게…","자꾸 깨우면… 친구 부른다…"]},
+ {fx:["♥","♡","♥"],col:["#F59124","#5B97E3"],anim:[{transform:"rotate(0)"},{transform:"rotate(360deg)"}],
+  lines:n=>["꺄르르 간지러워여!",`행운의 숫자는 ${n}이에여!`,"빙글빙글~ 어지러워여","저 귀엽져?","계속 누르면 친구 불러여!"]},
+ {fx:["…","✧","허"],col:["#5B97E3","#F59124"],anim:[{transform:"none"},{transform:"rotate(-7deg)"},{transform:"rotate(7deg)"},{transform:"rotate(-4deg)"},{transform:"none"}],
+  lines:n=>["허허, 이 늙은이를 왜 찌르누.",`오늘 행운의 수는 ${n}이니라.`,"운은 발로 뛰어 만드는 게야.","안경이 어디 갔나… 아, 썼구나.","자꾸 그러면 다른 녀석을 부르마."]},
+ {fx:["냥","♥","냥"],col:["#F59124","#5B97E3"],anim:[{transform:"none"},{transform:"translateX(-6px) rotate(-8deg)"},{transform:"translateX(6px) rotate(8deg)"},{transform:"translateX(-4px) rotate(-5deg)"},{transform:"none"}],
+  lines:n=>["냥! 쓰다듬는 건 환영이다냥",`행운의 숫자는 ${n}이다냥`,"골골골골…","츄르 주면 운세 하나 더 봐준다냥","더 누르면 친구 부른다냥!"]}];
+let pokeTimes=[],pokeLine={},sayEl=null,sayT=null;
+const reduceMotion=()=>window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function burst(x,y,chars,cols,big){
+  if(reduceMotion())return;
+  for(let i=0;i<(big?14:7);i++){const e=document.createElement("span");e.className="pk";e.textContent=chars[i%chars.length];
+    e.style.left=x+"px";e.style.top=y+"px";e.style.color=cols[i%cols.length];e.style.fontSize=(big?18:12)+Math.random()*10+"px";document.body.appendChild(e);
+    const a=(Math.PI*2*i)/(big?14:7)+Math.random()*.5,r=(big?70:40)+Math.random()*30;
+    e.animate([{transform:"translate(-50%,-50%) scale(.4)",opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*r}px),calc(-50% + ${Math.sin(a)*r-30}px)) scale(1)`,opacity:0}],{duration:900+Math.random()*300,easing:"cubic-bezier(.2,.8,.3,1)"}).onfinish=()=>e.remove()}
+}
+function tapSay(el,html){
+  if(sayEl)sayEl.remove();clearTimeout(sayT);
+  const r=el.getBoundingClientRect(),b=document.createElement("div");b.className="tapsay";b.innerHTML=html;document.body.appendChild(b);
+  const w=b.offsetWidth,h=b.offsetHeight;let top=r.top-h-10,below=false;if(top<8){top=r.bottom+10;below=true}
+  const left=Math.min(innerWidth-w-8,Math.max(8,r.left+r.width/2-w/2));
+  b.style.left=left+"px";b.style.top=top+"px";b.classList.toggle("below",below);
+  const tail=Math.min(w-16,Math.max(16,r.left+r.width/2-left));b.style.setProperty("--tx",tail+"px");
+  sayEl=b;sayT=setTimeout(()=>{b.remove();if(sayEl===b)sayEl=null},2300);
+}
+function poke(el){
+  const P=POKE[gi],r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
+  const n=((now.getDate()*7+now.getMonth()*3+gi*5)%9)+1;
+  if(!reduceMotion())el.animate(P.anim,{duration:gi===3?700:gi===2?900:560,easing:"cubic-bezier(.3,1.4,.5,1)"});
+  burst(cx,cy,P.fx,P.col,false);
+  const t=Date.now();pokeTimes=pokeTimes.filter(x=>t-x<2500);pokeTimes.push(t);
+  if(pokeTimes.length>=5){pokeTimes=[];
+    burst(cx,cy+10,["☁","☁","✦"],["#FFFFFF","#A9CDF5","#F59124"],true);
+    if(sayEl){sayEl.remove();sayEl=null}
+    setTimeout(()=>{const cur=document.querySelector(".screen.on");if(cur&&!$("app").hidden)go(cur.dataset.s,{stay:true});else{nextGuide();paintGuide()}
+      toast(`펑! ${G().name} 등장 (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧`)},250);
+    return}
+  const L=P.lines(n);pokeLine[gi]=((pokeLine[gi]??-1)+1)%L.length;
+  tapSay(el,`${L[pokeLine[gi]]}<span class="who">— ${G().name}</span>`);
+}
+document.addEventListener("click",ev=>{
+  const m=ev.target.closest(".frame .mascot,.frame .peek,.onboard .mascot");
+  if(!m)return;ev.stopPropagation();poke(m);
+},true);
 
 /* ===== 화면 ===== */
 function go(s,opts={}){
