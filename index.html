@@ -1044,7 +1044,7 @@ function luckyNum(){const f=compute();return f?f.num:null}
 const G=()=>GUIDES[gi];
 const nextGuide=()=>{gi=(gi+1)%GUIDES.length};
 function paintGuide(){document.querySelectorAll(".mascot use,.peek use").forEach(u=>u.setAttribute("href","#g"+gi))}
-const say=(el,txt)=>{el.innerHTML=`${txt}<span class="who">— ${G().name}</span>`;el.style.animation="none";el.offsetHeight;el.style.animation=""};
+const say=(el,txt)=>{clearTimeout(el._back);el._orig=null;el.innerHTML=`${txt}<span class="who">— ${G().name}</span>`;el.style.animation="none";el.offsetHeight;el.style.animation=""};
 
 
 /* ===== 7일 연속 축하 ===== */
@@ -1122,7 +1122,12 @@ function poke(el){
     return}
   const L=dailyLines(gi);pokeLine[gi]=((pokeLine[gi]??-1)+1)%L.length;
   const host=el.closest(".guide,.speak"),bub=host&&host.querySelector(".say,.bubbletxt");
-  if(bub){bub.innerHTML=`${L[pokeLine[gi]]}<span class="${bub.classList.contains("say")?"who":"small"}">— ${G().name}</span>`;bub.style.animation="none";void bub.offsetWidth;bub.style.animation="sayIn .35s cubic-bezier(.3,1.5,.5,1) both"}
+  if(bub){
+    const pop=()=>{bub.style.animation="none";void bub.offsetWidth;bub.style.animation="sayIn .35s cubic-bezier(.3,1.5,.5,1) both"};
+    if(!bub._orig)bub._orig=bub.innerHTML;
+    bub.innerHTML=`${L[pokeLine[gi]]}<span class="${bub.classList.contains("say")?"who":"small"}">— ${G().name}</span>`;pop();
+    clearTimeout(bub._back);bub._back=setTimeout(()=>{if(bub.isConnected&&bub._orig!=null){bub.innerHTML=bub._orig;bub._orig=null;pop()}},4000);
+  }
 }
 document.addEventListener("click",ev=>{
   const m=ev.target.closest(".frame .mascot,.frame .peek,.onboard .mascot");
