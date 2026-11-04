@@ -401,8 +401,35 @@ button.day:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(31,78,156,
 .share{position:fixed;inset:0;z-index:68;display:grid;place-items:center;padding:16px;background:rgba(10,22,48,.55);overflow:auto;animation:fadeIn .25s ease both}
 .share-box{width:100%;max-width:440px;background:#fff;border:1px solid #6B87AE;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:winIn .4s cubic-bezier(.3,1.4,.5,1) both}
 .share-body{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
-.share-img{width:100%;display:grid;place-items:center;background:#EEF3F9;border-radius:12px;padding:10px}
-.share-img img{max-width:100%;max-height:56vh;border-radius:8px;box-shadow:0 6px 18px rgba(31,78,156,.25)}
+.shopts{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px}
+.swatches{display:flex;gap:14px}
+.swatches button{border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;font:700 11px var(--f-disp);color:#7A8597;cursor:pointer}
+.sw{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #B9C7D6,inset 0 1px 3px rgba(0,0,0,.12);transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
+.sw-grid{background-color:#EAF3FB;background-image:linear-gradient(#C3D8F0 1px,transparent 1px),linear-gradient(90deg,#C3D8F0 1px,transparent 1px);background-size:7px 7px}
+.sw-sky{background:radial-gradient(circle at 34% 62%,#fff 0 5px,transparent 6px),radial-gradient(circle at 52% 56%,#fff 0 7px,transparent 8px),radial-gradient(circle at 68% 64%,#fff 0 5px,transparent 6px),linear-gradient(#A9D0FF,#E4F1FF)}
+.sw-night{background:radial-gradient(circle at 30% 30%,#fff 0 1px,transparent 2px),radial-gradient(circle at 70% 45%,#FFE3C2 0 1.5px,transparent 2.5px),radial-gradient(circle at 45% 72%,#fff 0 1px,transparent 2px),linear-gradient(#16213A,#2F4A7A)}
+.swatches button[aria-pressed="true"]{color:#2F6BC4;font-weight:900}
+.swatches button[aria-pressed="true"] .sw{transform:scale(1.12);box-shadow:0 0 0 2px #2F6BC4,0 3px 8px rgba(47,107,196,.35)}
+.ratio{display:inline-flex;background:#EEF3F9;border-radius:99px;padding:3px}
+.ratio button{border:0;background:none;border-radius:99px;padding:5px 11px;font:800 12px var(--f-disp);color:#7A8597;cursor:pointer}
+.ratio button[aria-pressed="true"]{background:#fff;color:#2F6BC4;box-shadow:0 1px 3px rgba(31,78,156,.25)}
+.printer{width:100%;background:#EEF3F9;border-radius:14px;padding:0 14px 14px}
+.slot{position:relative;z-index:2;height:34px;margin:0 -14px;border-radius:14px 14px 8px 8px;background:linear-gradient(180deg,#FFFFFF,#E3E8EF 55%,#CBD3DE);border-bottom:1px solid #A9B4C2;display:flex;align-items:center;gap:8px;padding:0 16px;font:800 10px var(--f-disp);letter-spacing:.14em;color:#8A96A6}
+.slot::after{content:"";position:absolute;left:22px;right:22px;bottom:-5px;height:9px;border-radius:5px;background:#2E3644;box-shadow:inset 0 3px 4px rgba(0,0,0,.6)}
+.led{width:8px;height:8px;border-radius:50%;background:#5B97E3;box-shadow:0 0 6px #5B97E3}
+.printer.busy .led{background:#F59124;box-shadow:0 0 9px #F59124;animation:ledBlink .32s steps(2) infinite}
+@keyframes ledBlink{50%{opacity:.25}}
+.paper{overflow:hidden;display:grid;justify-items:center;padding:2px 0 6px}
+.paper img{display:block;max-width:100%;max-height:52vh;border-radius:0 0 8px 8px;box-shadow:0 8px 16px rgba(31,78,156,.22)}
+.printer.feedq .paper img{animation:feedQ .55s cubic-bezier(.2,.8,.3,1) both}
+.printer.feed .paper img{animation:feed 1.5s linear both}
+.printer.busy .slot{animation:hum .09s linear infinite}
+@keyframes feedQ{from{transform:translateY(-100%)}to{transform:none}}
+@keyframes feed{0%{transform:translateY(-101%)}12%{transform:translateY(-84%)}20%{transform:translateY(-84%)}34%{transform:translateY(-60%)}42%{transform:translateY(-60%)}56%{transform:translateY(-36%)}64%{transform:translateY(-36%)}80%{transform:translateY(-10%)}88%{transform:translateY(-10%)}96%{transform:translateY(1.5%)}100%{transform:none}}
+@keyframes hum{50%{transform:translateY(.6px)}}
+#shSave.done{animation:popBtn .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes popBtn{40%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.printer.feed .paper img,.printer.feedq .paper img,.printer.busy .slot{animation:none}}
 .segx{display:inline-flex;border:1px solid #9DA3AC;border-radius:99px;overflow:hidden}
 .segx button{border:none;padding:6px 14px;font-family:var(--f-disp);font-weight:800;background:linear-gradient(180deg,#fff,#E3E5E9);color:#3C4048}
 .segx button[aria-pressed="true"]{color:#fff;background:linear-gradient(180deg,#9CC6F5,#4F8EDD 50%,#2F6BC4 51%,#4F8EDD)}
@@ -680,12 +707,17 @@ img{max-width:100%}
   <div class="share-box">
     <div class="titlebar"><i class="orb" aria-hidden="true">★</i><span id="shTitle">공유 이미지</span><button type="button" class="wbtn" id="shClose">닫기</button></div>
     <div class="share-body">
-      <div class="segx" id="shStyle" role="group" aria-label="스타일"><button type="button" data-style="screen" aria-pressed="true">병풍</button><button type="button" data-style="homepy" aria-pressed="false">미니홈피</button><button type="button" data-style="sky" aria-pressed="false">하늘 스티커</button></div>
-      <div class="segx" id="shFmt" role="group" aria-label="이미지 크기"><button type="button" data-fmt="story" aria-pressed="true">스토리 9:16</button><button type="button" data-fmt="square" aria-pressed="false">정사각 1:1</button></div>
-      <div class="share-img"><img id="shImg" alt="오늘의 운세 공유 이미지"></div>
+      <div class="shopts">
+        <div class="swatches" id="shStyle" role="group" aria-label="배경"><button type="button" data-style="grid" aria-pressed="true"><i class="sw sw-grid"></i>모눈</button><button type="button" data-style="sky" aria-pressed="false"><i class="sw sw-sky"></i>하늘</button><button type="button" data-style="night" aria-pressed="false"><i class="sw sw-night"></i>밤하늘</button></div>
+        <div class="ratio" id="shFmt" role="group" aria-label="이미지 비율"><button type="button" data-fmt="story" aria-pressed="true">9:16</button><button type="button" data-fmt="square" aria-pressed="false">1:1</button></div>
+      </div>
+      <div class="printer" id="shPrinter">
+        <div class="slot" aria-hidden="true"><i class="led"></i>ONEUL-UN PRINT</div>
+        <div class="paper"><img id="shImg" alt="오늘의 운세 공유 이미지"></div>
+      </div>
       <p class="lmsg" id="shMsg" role="status"></p>
-      <div class="row" style="justify-content:center"><button type="button" class="gloss acc" id="shSave">이미지 저장</button><button type="button" class="gloss gray" id="shShare" hidden>공유하기</button></div>
-      <p class="small">생년월일과 사주 원국은 들어가지 않아요. 저장이 안 되면 이미지를 길게 누르거나 우클릭해서 저장하세요.</p>
+      <div class="row" style="justify-content:center"><button type="button" class="gloss acc" id="shSave">🖨 이미지 저장</button><button type="button" class="gloss gray" id="shShare" hidden>공유하기</button></div>
+      <p class="small">생년월일과 사주 원국은 넣지 않아요.</p>
     </div>
   </div>
 </div>
@@ -1164,7 +1196,7 @@ document.addEventListener("click",ev=>{
 
 
 /* ===== 공유 이미지 (폰 안에서 바로 그려요. 생년월일·사주 원국은 넣지 않아요) ===== */
-let shareFmt="story",shareStyle="screen",shareBlob=null,shareTok=0;
+let shareFmt="story",shareStyle="grid",shareBlob=null,shareTok=0;
 const SF="'Gothic A1','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif";
 function rr(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()}
 function txt(x,t,X,Y,size,weight,color,align,stroke){x.font=`${weight} ${size}px ${SF}`;x.textAlign=align||"left";x.textBaseline="alphabetic";
@@ -1357,89 +1389,119 @@ async function makeSky(fmt){
   return await new Promise(res=>cv.toBlob(b=>res(b),"image/png"));
 }
 
-/* 미니홈피 스타일 */
+/* 미니홈피 스타일 (배경 3종: 모눈·하늘·밤하늘) */
 function gridBG(x,W,H){x.fillStyle="#EAF3FB";x.fillRect(0,0,W,H);x.strokeStyle="#CFE2F5";x.lineWidth=2;for(let i=0;i<=W;i+=40){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}for(let j=0;j<=H;j+=40){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke()}}
+function nightBG(x,W,H){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#16213A");g.addColorStop(1,"#2F4A7A");x.fillStyle=g;x.fillRect(0,0,W,H);
+  let s=7;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;for(let i=0;i<160;i++){x.fillStyle=`rgba(255,255,255,${.25+rnd()*.6})`;x.beginPath();x.arc(rnd()*W,rnd()*H,rnd()*2.2+.4,0,Math.PI*2);x.fill()}
+  [[.1,.08,26],[.88,.22,20],[.06,.6,18],[.94,.75,24]].forEach(([a,b,z])=>txt(x,"✦",W*a,H*b,z,900,"#FFE3C2","center"))}
 function dotBox(x,X,Y,w,h,r){x.save();x.setLineDash([4,5]);x.lineWidth=2;x.strokeStyle="#B9C7D6";rr(x,X,Y,w,h,r);x.stroke();x.restore()}
-function ring(x,cx,cy){const g=x.createLinearGradient(0,cy-12,0,cy+12);g.addColorStop(0,"#FFFFFF");g.addColorStop(.5,"#C9D3DE");g.addColorStop(1,"#8E9BAA");rr(x,cx-38,cy-11,76,22,11);x.fillStyle=g;x.fill();x.lineWidth=2;x.strokeStyle="#7F8B99";x.stroke();
-  [cx-46,cx+46].forEach(h=>{x.beginPath();x.arc(h,cy,8,0,Math.PI*2);x.fillStyle="#C9D3DE";x.fill()})}
-function secHead(x,t,X,Y,w){txt(x,t,X,Y,24,800,"#2F6BC4");x.strokeStyle="#D5DEE8";x.lineWidth=2;x.beginPath();x.moveTo(X,Y+12);x.lineTo(X+w,Y+12);x.stroke()}
+function ring(x,cx,cy){const g=x.createLinearGradient(0,cy-12,0,cy+12);g.addColorStop(0,"#FFFFFF");g.addColorStop(.5,"#C9D3DE");g.addColorStop(1,"#8E9BAA");rr(x,cx-34,cy-11,68,22,11);x.fillStyle=g;x.fill();x.lineWidth=2;x.strokeStyle="#7F8B99";x.stroke();
+  [cx-42,cx+42].forEach(h=>{x.beginPath();x.arc(h,cy,7,0,Math.PI*2);x.fillStyle="#C9D3DE";x.fill()})}
+function secHead(x,t,X,Y,w,sz){sz=sz||24;txt(x,t,X,Y,sz,800,"#2F6BC4");x.strokeStyle="#D5DEE8";x.lineWidth=2;x.beginPath();x.moveTo(X,Y+12);x.lineTo(X+w,Y+12);x.stroke()}
 function miniRoom(x,c,mas,X,Y,w,h){x.save();rr(x,X,Y,w,h,10);x.clip();
   x.fillStyle="#F7FAFE";x.fillRect(X,Y,w,h*.6);x.strokeStyle="#E2EAF4";x.lineWidth=2;for(let i=X;i<X+w;i+=26){x.beginPath();x.moveTo(i,Y);x.lineTo(i,Y+h*.6);x.stroke()}
   const fy=Y+h*.6;x.fillStyle="#D9E7F7";x.fillRect(X,fy,w,h*.4);x.strokeStyle="#BFD3EC";for(let i=-h;i<w+h;i+=36){x.beginPath();x.moveTo(X+i,fy);x.lineTo(X+i-h*.4,Y+h);x.stroke()}for(let j=fy;j<Y+h;j+=22){x.beginPath();x.moveTo(X,j);x.lineTo(X+w,j);x.stroke()}
-  x.fillStyle="#A9CDF5";rr(x,X+w*.62,fy-h*.22,w*.3,h*.24,8);x.fill();x.fillStyle="#fff";x.fillRect(X+w*.62+8,fy-h*.22+8,w*.3-16,h*.06);
-  x.fillStyle="#F59124";x.beginPath();x.arc(X+w*.77,fy-h*.24,9,0,Math.PI*2);x.fill();
-  const cw=w*.26;x.save();x.translate(X+w*.3,Y+h*.33);x.rotate(-.06);drawCardFace(x,c,-cw/2,-cw*.8,cw);x.restore();
-  x.drawImage(mas,X+w*.5,fy-h*.06,w*.3,w*.3*.923);x.restore();x.lineWidth=2;x.strokeStyle="#B9C7D6";rr(x,X,Y,w,h,10);x.stroke()}
-function tabs(x,X,Y,labels,gap){labels.forEach((t,i)=>{const y=Y+i*gap,on=i===0;rr(x,X,y,58,gap-14,10);x.fillStyle=on?"#FFFFFF":"#5B97E3";x.fill();x.lineWidth=2;x.strokeStyle=on?"#B9C7D6":"#2F6BC4";x.stroke();
-  [...t].forEach((ch,k)=>txt(x,ch,X+29,y+34+k*28,24,800,on?"#2F6BC4":"#FFFFFF","center"))})}
-async function makeHomepy(fmt){
-  const F=compute();if(!F)return null;
+  const bw=Math.min(w*.3,h*.55);x.fillStyle="#A9CDF5";rr(x,X+w*.64,fy-h*.22,bw,h*.24,8);x.fill();x.fillStyle="#fff";x.fillRect(X+w*.64+8,fy-h*.22+8,bw-16,h*.06);
+  x.fillStyle="#F59124";x.beginPath();x.arc(X+w*.64+bw/2,fy-h*.24,9,0,Math.PI*2);x.fill();
+  x.strokeStyle="#C9D6E4";x.lineWidth=3;rr(x,X+w*.08,Y+h*.1,w*.16,h*.2,6);x.stroke();x.beginPath();x.moveTo(X+w*.16,Y+h*.1);x.lineTo(X+w*.16,Y+h*.3);x.moveTo(X+w*.08,Y+h*.2);x.lineTo(X+w*.24,Y+h*.2);x.stroke();
+  const cw=Math.min(w*.2,h*.36);x.save();x.translate(X+w*.4,Y+h*.34);x.rotate(-.06);drawCardFace(x,c,-cw/2,-cw*.8,cw);x.restore();
+  const mw=Math.min(w*.24,h*.45);x.drawImage(mas,X+w*.5,fy-mw*.15,mw,mw*.923);x.restore();x.lineWidth=2;x.strokeStyle="#B9C7D6";rr(x,X,Y,w,h,10);x.stroke()}
+const THEME={grid:{bg:gridBG,frame:"#DCE6F0",line:"#B9C7D6",head:"#2F6BC4",sub:"#7A8597",bar:"#FFFFFF",barT:"#7A8597"},
+  sky:{bg:(x,W,H)=>{const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#BFDDFF");g.addColorStop(1,"#EAF4FF");x.fillStyle=g;x.fillRect(0,0,W,H);
+      [[.11,.07,1],[.91,.05,.8],[.06,.52,1.1],[.94,.68,1],[.15,.96,.9],[.86,.97,1]].forEach(([a,b,s])=>cloud(x,W*a,H*b,s,.95))},
+    frame:"rgba(255,255,255,.72)",line:"#BFD6F3",head:"#2F6BC4",sub:"#5B6B85",bar:"rgba(255,255,255,.85)",barT:"#7A8597"},
+  night:{bg:nightBG,frame:"#24324F",line:"#3E5277",head:"#FFFFFF",sub:"#A9B8D3",bar:"rgba(255,255,255,.12)",barT:"#C9D6EA"}};
+function stampRow(x,X,Y,w,n){const cw=(w-(n-1)*8)/n;for(let i=n-1;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const k=dkey(d),ev=state.days[k]||{},X0=X+(n-1-i)*(cw+8);
+  rr(x,X0,Y,cw,cw,8);x.fillStyle=ev.mission?"#FFF3E3":"#F4F7FB";x.fill();x.lineWidth=k===TODAY?4:2;x.strokeStyle=k===TODAY?"#5B97E3":"#D5DEE8";x.stroke();
+  txt(x,String(d.getDate()),X0+cw/2,Y+cw*.38,cw*.32,800,"#7A8597","center");
+  if(ev.mission){const s=cw*.46;rr(x,X0+cw/2-s/2,Y+cw-s-6,s,s,6);x.fillStyle="#F59124";x.fill();txt(x,"完",X0+cw/2,Y+cw-s*.32-6,s*.62,900,"#fff","center")}}}
+function luckyList(x,D,X,Y,gap,sz,n){[["색",D.color],["방향",D.dir],["숫자",String(D.num)],["이번 달",`${D.mg}의 달`]].slice(0,n).forEach(([k,v],i)=>{const yy=Y+i*gap;txt(x,`· ${k}`,X,yy,sz,800,"#7A8597");
+  if(k==="색"){x.beginPath();x.arc(X+sz*5.4,yy-sz*.33,sz*.45,0,Math.PI*2);x.fillStyle=LUCKY_HEX[v];x.fill();x.lineWidth=2;x.strokeStyle="#9FB4CF";x.stroke();txt(x,v,X+sz*6.2,yy,sz,800,"#22324A")}else txt(x,v,X+sz*5,yy,sz,800,"#22324A")})}
+async function makeHomepy(fmt,theme){
+  const F=compute();if(!F)return null;const T=THEME[theme]||THEME.grid;
   try{await Promise.all(["900 60px 'Gothic A1'","800 40px 'Gothic A1'","700 30px 'Gothic A1'"].map(f=>document.fonts.load(f)))}catch(e){}
   const e=state.days[TODAY]||{},c=e.card!=null?CARDS[e.card]:null,D=F.D,G0=GUIDES[gi];
   const all=Object.values(state.days).filter(v=>v.card!=null||v.mission||v.verdict).length,st=streakNow();
   const W=1080,H=fmt==="story"?1920:1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d");
-  gridBG(x,W,H);const mas=await mascotImg(gi),line=TONE[gi](D)[1];
-  const story=fmt==="story";
-  const bx=story?50:40,by=story?140:110,bw=story?940:950,bh=story?1680:930;
-  rr(x,40,story?40:26,W-80,story?64:56,14);x.fillStyle="#fff";x.fill();x.lineWidth=2;x.strokeStyle="#C9D6E4";x.stroke();
-  txt(x,"http://pong-83.github.io/oneul-un",80,story?82:62,story?26:22,700,"#7A8597");
-  x.save();x.shadowColor="rgba(40,70,110,.25)";x.shadowBlur=20;x.shadowOffsetY=8;rr(x,bx,by,bw,bh,26);x.fillStyle="#DCE6F0";x.fill();x.restore();x.lineWidth=2;x.strokeStyle="#B9C7D6";rr(x,bx,by,bw,bh,26);x.stroke();
-  const lw=story?400:380,LX=bx+22,PY=by+58,PH=bh-80,RX=LX+lw+50,rw=bx+bw-22-RX;
-  txt(x,"TODAY",LX+14,by+38,story?20:18,800,"#7A8597");txt(x,String(st),LX+(story?90:82),by+38,story?22:20,900,"#F59124");
-  txt(x,"| TOTAL",LX+(story?120:110),by+38,story?20:18,800,"#7A8597");txt(x,String(all),LX+(story?218:200),by+38,story?22:20,900,"#2F6BC4");
-  txt(x,`${who()}의 오늘운`,RX+14,by+40,story?30:26,900,"#2F6BC4");
-  [[LX,lw],[RX,rw]].forEach(([X,w])=>{rr(x,X,PY,w,PH,16);x.fillStyle="#fff";x.fill();x.lineWidth=2;x.strokeStyle="#C9D6E4";x.stroke()});
-  const rc=LX+lw+25;(story?[PY+120,PY+220,PY+PH-220,PY+PH-120]:[PY+90,PY+170,PY+PH-170,PY+PH-90]).forEach(y=>ring(x,rc,y));
-  tabs(x,bx+bw-6,PY+30,["홈","운세","카드","미션"],story?130:110);
-  /* left page */
-  const ph=story?380:250;dotBox(x,LX+26,PY+26,lw-52,ph,8);x.fillStyle="#F2F6FA";x.fillRect(LX+30,PY+30,lw-60,ph-8);
-  const mw=story?250:190;x.drawImage(mas,LX+lw/2-mw/2,PY+26+ph/2-mw*.46,mw,mw*.923);
-  let y=PY+ph+60;
-  rr(x,LX+26,y-34,lw-52,48,24);x.fillStyle="#EEF4FC";x.fill();
-  txt(x,`TODAY IS.. ♪ ${D.stage}`,LX+46,y,story?26:22,800,"#2F6BC4");
-  y+=story?60:48;
-  wrapLines(x,line,lw-70,story?27:23,700).slice(0,story?4:3).forEach((l,i)=>txt(x,l,LX+34,y+i*(story?40:33),story?27:23,700,"#3B4656"));
-  y+=(story?4:3)*(story?40:33)+(story?20:8);
-  txt(x,"▶ EDIT  ▶ HISTORY",LX+34,y,story?20:18,800,"#5B97E3");y+=story?60:44;
-  txt(x,`${G0.name} ♡`,LX+34,y,story?32:27,900,"#22324A");y+=story?36:30;
-  txt(x,"guide@oneul-un",LX+34,y,story?20:18,700,"#F59124");y+=story?44:34;
-  rr(x,LX+30,y-6,lw-60,story?44:38,6);x.fillStyle="#fff";x.fill();x.lineWidth=2;x.strokeStyle="#B9C7D6";x.stroke();
-  txt(x,"★ 오늘의 행운 ★",LX+46,y+(story?25:21),story?22:19,800,"#22324A");txt(x,"▼",LX+lw-56,y+(story?25:21),story?18:16,800,"#7A8597");
-  y+=story?78:62;
-  const lk=[["색",D.color],["방향",D.dir],["숫자",String(D.num)],["이번 달",`${D.mg}의 달`]];
-  lk.slice(0,story?4:3).forEach(([k,v],i)=>{const yy=y+i*(story?44:36);txt(x,`· ${k}`,LX+40,yy,story?24:21,800,"#7A8597");
-    if(k==="색"){x.beginPath();x.arc(LX+170,yy-8,11,0,Math.PI*2);x.fillStyle=LUCKY_HEX[v];x.fill();x.lineWidth=2;x.strokeStyle="#9FB4CF";x.stroke();txt(x,v,LX+190,yy,story?24:21,800,"#22324A")}
-    else txt(x,v,LX+160,yy,story?24:21,800,"#22324A")});
-  if(story){let sy=PY+PH-170;secHead(x,"최근 7일 도장",LX+34,sy,lw-68);sy+=34;const cw=(lw-68-6*8)/7;
-    for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const k=dkey(d),ev=state.days[k]||{},X0=LX+34+(6-i)*(cw+8);
-      rr(x,X0,sy,cw,cw,8);x.fillStyle=ev.mission?"#FFF3E3":"#F4F7FB";x.fill();x.lineWidth=k===TODAY?4:2;x.strokeStyle=k===TODAY?"#5B97E3":"#D5DEE8";x.stroke();
-      txt(x,String(d.getDate()),X0+cw/2,sy+24,18,800,"#7A8597","center");
-      if(ev.mission){rr(x,X0+cw/2-14,sy+cw-36,28,28,6);x.fillStyle="#F59124";x.fill();txt(x,"完",X0+cw/2,sy+cw-15,17,900,"#fff","center")}}}
-  /* right page */
-  let ry=PY+56;const RXi=RX+28,RW=rw-56;
-  secHead(x,"오늘의 운세",RXi,ry,RW);ry+=story?48:40;
-  txt(x,`「${D.title}」`,RXi,ry,story?30:25,900,"#1C4689");ry+=story?20:14;
-  [["총운",F.total],["재물",F.sc[0]],["애정",F.sc[1]],["일·학업",F.sc[2]]].forEach(([l,v],i)=>{const yy=ry+(i+1)*(story?44:36);txt(x,l,RXi,yy,story?24:21,800,"#5B6B85");drawStars(x,v,RXi+RW-110,yy-9,story?30:25)});
-  ry+=(story?5:5)*(story?44:36);
-  secHead(x,"오늘의 미션",RXi,ry,RW);ry+=story?46:38;
-  wrapLines(x,`${e.mission?"☑":"☐"} ${D.mission}`,RW,story?26:22,800).slice(0,2).forEach((l,i)=>txt(x,l,RXi,ry+i*(story?36:30),story?26:22,800,"#22324A"));
-  ry+=story?96:72;
-  secHead(x,"미니룸",RXi,ry,RW);ry+=story?26:20;
-  const mh=story?470:Math.max(200,PY+PH-ry-30);miniRoom(x,c,mas,RXi,ry,RW,mh);ry+=mh+(story?56:0);
-  if(story){secHead(x,"오늘의 이야기",RXi,ry,RW);ry+=44;
-    for(const [k,v] of [["흐름",D.flow],["기운",D.stageText],["이번 달",D.monthLine]]){txt(x,`· ${k}`,RXi,ry,22,900,"#F59124");ry+=32;
-      const ls=wrapLines(x,v,RW-10,22,700).slice(0,3);ls.forEach((l,i)=>txt(x,l,RXi+10,ry+i*31,22,700,"#3B4656"));ry+=ls.length*31+14}}
-  if(story)txt(x,"♡ 오늘운에 놀러오세요 · pong-83.github.io/oneul-un",W/2,1880,24,800,"#5B97E3","center");
+  T.bg(x,W,H);const mas=await mascotImg(gi),line=TONE[gi](D)[1],story=fmt==="story";
+  const date=`${now.getMonth()+1}월 ${now.getDate()}일 ${"일월화수목금토"[now.getDay()]}요일`;
+  const ab=story?[40,36,W-80,62]:[40,22,W-80,54];rr(x,...ab,14);x.fillStyle=T.bar;x.fill();x.lineWidth=2;x.strokeStyle=T.line;x.stroke();
+  txt(x,"http://pong-83.github.io/oneul-un",80,ab[1]+ab[3]*.64,story?26:22,700,T.barT);
+  const bx=story?50:40,by=story?126:96,bw=story?980:1000,bh=story?1720:950;
+  x.save();x.shadowColor="rgba(20,40,80,.3)";x.shadowBlur=22;x.shadowOffsetY=8;rr(x,bx,by,bw,bh,26);x.fillStyle=T.frame;x.fill();x.restore();x.lineWidth=2;x.strokeStyle=T.line;rr(x,bx,by,bw,bh,26);x.stroke();
+  const hy=by+42,hs=story?22:19;
+  txt(x,"TODAY",bx+(story?84:30),hy,hs,800,T.sub);txt(x,String(st),bx+(story?162:100),hy,hs+2,900,"#F59124");
+  txt(x,"| TOTAL",bx+(story?194:126),hy,hs,800,T.sub);txt(x,String(all),bx+(story?296:216),hy,hs+2,900,theme==="night"?"#A9CDF5":"#2F6BC4");
+  txt(x,`${who()}의 오늘운`,bx+bw-30,hy+2,story?30:26,900,T.head,"right");
+  if(story){
+    const PX=bx+64,PY=by+70,PW=bw-94,PH=bh-96;rr(x,PX,PY,PW,PH,18);x.fillStyle="#fff";x.fill();x.lineWidth=2;x.strokeStyle="#C9D6E4";x.stroke();
+    for(let y=PY+70;y<PY+PH-30;y+=140)ring(x,PX-4,y);
+    const L=PX+58,R=PX+PW-44,IW=R-L,soft="#F4F8FD";
+    /* 프로필 */
+    const ps=270,py=PY+40;dotBox(x,L,py,ps,ps,8);x.fillStyle="#F2F6FA";x.fillRect(L+4,py+4,ps-8,ps-8);x.drawImage(mas,L+ps/2-110,py+ps/2-102,220,203);
+    const RX=L+ps+36,RW=R-RX;
+    txt(x,date,RX+4,py+26,22,800,"#7A8597");
+    rr(x,RX,py+46,RW,52,26);x.fillStyle="#EEF4FC";x.fill();txt(x,`TODAY IS.. ♪ ${D.stage}`,RX+22,py+81,26,800,"#2F6BC4");
+    wrapLines(x,line,RW-10,26,700).slice(0,3).forEach((l,i)=>txt(x,l,RX+6,py+146+i*38,26,700,"#3B4656"));
+    txt(x,`${G0.name} ♡`,RX+6,py+ps-4,30,900,"#22324A");
+    /* 운세 */
+    let y=py+ps+80;secHead(x,"오늘의 운세",L,y,IW);y+=60;
+    txt(x,`「${D.title}」`,L,y,38,900,"#1C4689");drawStars(x,F.total,R-100,y-13,36);
+    y+=50;wrapLines(x,D.flow,IW,25,700).slice(0,2).forEach((l,i)=>txt(x,l,L,y+i*36,25,700,"#3B4656"));
+    y+=72;rr(x,L,y,IW,112,16);x.fillStyle=soft;x.fill();
+    const cwid=IW/3;[["재물",F.sc[0]],["애정",F.sc[1]],["일·학업",F.sc[2]]].forEach(([l,v],i)=>{const cx=L+cwid*i+cwid/2;txt(x,l,cx,y+44,24,800,"#5B6B85","center");drawStars(x,v,cx,y+80,28)});
+    y+=112+80;
+    /* 카드 */
+    secHead(x,"오늘의 카드",L,y,IW);y+=34;rr(x,L,y,IW,330,16);x.fillStyle=soft;x.fill();
+    const cw=186;x.save();x.translate(L+40+cw/2,y+165);x.rotate(-.04);drawCardFace(x,c,-cw/2,-cw*.8,cw);x.restore();
+    const TX=L+40+cw+44,TW=R-28-TX;
+    if(c){txt(x,c[2],TX,y+72,22,800,"#7A8597");txt(x,c[1],TX,y+124,40,900,"#1C4689");
+      x.font=`800 24px ${SF}`;const kwW=x.measureText(c[4]).width+36;rr(x,TX,y+148,kwW,42,21);x.fillStyle="#FFE9D1";x.fill();txt(x,c[4],TX+18,y+178,24,800,"#B85F0E");
+      wrapLines(x,c[6],TW,24,700).slice(0,3).forEach((l,i)=>txt(x,l,TX,y+236+i*34,24,700,"#3B4656"))}
+    else{txt(x,"아직 카드를 뽑지 않았어요",TX,y+150,28,800,"#5B6B85");txt(x,"오늘운에서 한 장 골라보세요",TX,y+194,24,700,"#7A8597")}
+    y+=330+80;
+    /* 미션 */
+    secHead(x,"오늘의 미션",L,y,IW);y+=56;
+    wrapLines(x,`${e.mission?"☑":"☐"} ${D.mission}`,IW,28,800).slice(0,2).forEach((l,i)=>txt(x,l,L,y+i*40,28,800,"#22324A"));y+=110;
+    /* 행운 + 도장 */
+    const half=(IW-48)/2,SX=L+half+48;secHead(x,"★ 오늘의 행운",L,y,half);secHead(x,"최근 7일 도장",SX,y,half);y+=54;
+    luckyList(x,D,L+4,y,44,24,4);stampRow(x,SX,y-20,half,7);
+    txt(x,st>0?`${st}일 연속 도장 중 ✦`:"오늘 첫 도장을 찍어보세요",SX,y+86,24,800,"#F59124");
+    txt(x,"♡ 오늘운에 놀러오세요",W/2,H-22,24,800,theme==="night"?"#C9D6EA":"#5B97E3","center");
+  }else{
+    const lw=380,LX=bx+22,PY=by+66,PH=bh-88,RX=LX+lw+50,rw=bx+bw-22-RX;
+    [[LX,lw],[RX,rw]].forEach(([X,w])=>{rr(x,X,PY,w,PH,16);x.fillStyle="#fff";x.fill();x.lineWidth=2;x.strokeStyle="#C9D6E4";x.stroke()});
+    const rc=LX+lw+25;[PY+90,PY+170,PY+PH-170,PY+PH-90].forEach(y=>ring(x,rc,y));
+    const ph=240;dotBox(x,LX+26,PY+24,lw-52,ph,8);x.fillStyle="#F2F6FA";x.fillRect(LX+30,PY+28,lw-60,ph-8);x.drawImage(mas,LX+lw/2-95,PY+24+ph/2-88,190,175);
+    let y=PY+ph+62;rr(x,LX+26,y-32,lw-52,46,23);x.fillStyle="#EEF4FC";x.fill();txt(x,`TODAY IS.. ♪ ${D.stage}`,LX+46,y,22,800,"#2F6BC4");
+    y+=46;wrapLines(x,line,lw-70,22,700).slice(0,3).forEach((l,i)=>txt(x,l,LX+34,y+i*32,22,700,"#3B4656"));y+=118;
+    txt(x,`${G0.name} ♡`,LX+34,y,26,900,"#22324A");y+=50;
+    secHead(x,"★ 오늘의 행운",LX+34,y,lw-68,21);y+=46;luckyList(x,D,LX+38,y,36,21,3);y+=120;
+    secHead(x,"최근 7일 도장",LX+34,y,lw-68,21);stampRow(x,LX+34,y+30,lw-68,7);
+    let ry=PY+52;const RXi=RX+28,RW=rw-56;
+    secHead(x,"오늘의 운세",RXi,ry,RW);ry+=46;txt(x,`「${D.title}」`,RXi,ry,25,900,"#1C4689");ry+=14;
+    [["총운",F.total],["재물",F.sc[0]],["애정",F.sc[1]],["일·학업",F.sc[2]]].forEach(([l,v],i)=>{const yy=ry+30+i*42;txt(x,l,RXi,yy,22,800,"#5B6B85");drawStars(x,v,RXi+RW-110,yy-9,27)});
+    ry+=30+3*42+70;secHead(x,"오늘의 미션",RXi,ry,RW);ry+=42;
+    wrapLines(x,`${e.mission?"☑":"☐"} ${D.mission}`,RW,22,800).slice(0,2).forEach((l,i)=>txt(x,l,RXi,ry+i*30,22,800,"#22324A"));ry+=84;
+    secHead(x,"오늘의 카드",RXi,ry,RW);ry+=24;
+    const bh2=PY+PH-ry-26;rr(x,RXi,ry,RW,bh2,14);x.fillStyle="#F4F8FD";x.fill();
+    const cw=130;x.save();x.translate(RXi+22+cw/2,ry+bh2/2);x.rotate(-.04);drawCardFace(x,c,-cw/2,-cw*.8,cw);x.restore();
+    const TX=RXi+22+cw+28,TW=RXi+RW-18-TX,ty=ry+bh2/2-cw*.8+10;
+    if(c){txt(x,c[1],TX,ty+24,28,900,"#1C4689");x.font=`800 20px ${SF}`;const kwW=x.measureText(c[4]).width+30;rr(x,TX,ty+42,kwW,36,18);x.fillStyle="#FFE9D1";x.fill();txt(x,c[4],TX+15,ty+67,20,800,"#B85F0E");
+      wrapLines(x,c[6],TW,20,700).slice(0,4).forEach((l,i)=>txt(x,l,TX,ty+116+i*29,20,700,"#3B4656"))}
+    else{txt(x,"아직 카드를",TX,ty+60,24,800,"#5B6B85");txt(x,"뽑지 않았어요",TX,ty+92,24,800,"#5B6B85")}
+  }
   return await new Promise(res=>cv.toBlob(b=>res(b),"image/png"));
 }
 
-async function makeShare(fmt,style){style=style||shareStyle;return style==="homepy"?makeHomepy(fmt):style==="sky"?makeSky(fmt):makeScreen(fmt)}
+async function makeShare(fmt,style){return makeHomepy(fmt,style||shareStyle)}
 async function openShare(fmt,style){shareStyle=style||shareStyle;
   if(!compute()){toast("생년월일을 먼저 넣어주세요");return}
   shareFmt=fmt||shareFmt;$("share").hidden=false;$("shMsg").textContent="이미지를 그리는 중…";
   document.querySelectorAll("#shFmt button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fmt===shareFmt?"true":"false"));document.querySelectorAll("#shStyle button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.style===shareStyle?"true":"false"));
   const tok=++shareTok,blob=await makeShare(shareFmt,shareStyle);if(tok!==shareTok)return;shareBlob=blob;if(!shareBlob){$("shMsg").textContent="이미지를 만들지 못했어요";return}
   const old=$("shImg").src;$("shImg").src=URL.createObjectURL(shareBlob);if(old&&old.startsWith("blob:"))URL.revokeObjectURL(old);
+  const pr=$("shPrinter");pr.classList.remove("feedq","feed");void pr.offsetWidth;pr.classList.add("feedq");
   $("shMsg").textContent="";
   const f=new File([shareBlob],`오늘운-${TODAY}.png`,{type:"image/png"});
   $("shShare").hidden=!(navigator.canShare&&navigator.canShare({files:[f]}));
@@ -1447,8 +1509,13 @@ async function openShare(fmt,style){shareStyle=style||shareStyle;
 $("shFmt").onclick=ev=>{const b=ev.target.closest("[data-fmt]");if(b)openShare(b.dataset.fmt)};
 $("shStyle").onclick=ev=>{const b=ev.target.closest("[data-style]");if(b)openShare(shareFmt,b.dataset.style)};
 $("shClose").onclick=()=>{$("share").hidden=true};
-$("shSave").onclick=async()=>{if(!shareBlob)return;const name=`오늘운-${TODAY}-${{screen:"병풍",homepy:"미니홈피",sky:"하늘"}[shareStyle]}-${shareFmt==="story"?"스토리":"정사각"}.png`;
-  const dl=window.claude&&window.claude.use?await window.claude.use("downloads").catch(()=>null):null;
+let printing=false;
+function printOut(){return new Promise(res=>{const pr=$("shPrinter"),btn=$("shSave");if(matchMedia("(prefers-reduced-motion: reduce)").matches){res();return}
+  printing=true;btn.disabled=true;btn.textContent="🖨 인쇄 중…";$("shMsg").textContent="";pr.classList.remove("feedq","feed","busy");void pr.offsetWidth;pr.classList.add("feed","busy");
+  setTimeout(()=>{pr.classList.remove("busy");btn.disabled=false;btn.textContent="🖨 이미지 저장";btn.classList.remove("done");void btn.offsetWidth;btn.classList.add("done");printing=false;res()},1500)})}
+$("shSave").onclick=async()=>{if(!shareBlob||printing)return;const name=`오늘운-${TODAY}-${{grid:"모눈",sky:"하늘",night:"밤하늘"}[shareStyle]||"모눈"}-${shareFmt==="story"?"스토리":"정사각"}.png`;
+  const dlP=window.claude&&window.claude.use?window.claude.use("downloads").catch(()=>null):Promise.resolve(null);
+  await printOut();const dl=await dlP;
   if(dl){try{await dl.save({filename:name,data:shareBlob});$("shMsg").textContent="저장했어요 ✦"}
     catch(err){$("shMsg").textContent=err&&err.code==="declined"?"저장을 취소했어요.":"여기서는 저장이 막혀 있어요. 이미지를 길게 누르거나 우클릭해서 저장하세요."}return}
   const a=document.createElement("a");a.href=$("shImg").src;a.download=name;document.body.appendChild(a);a.click();a.remove();
