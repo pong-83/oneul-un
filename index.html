@@ -244,6 +244,7 @@ select{appearance:none;-webkit-appearance:none;padding-right:28px;font-weight:70
 .cfr .num{position:absolute;top:8%;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3cqw;font-family:var(--f-latin);font-weight:700;font-size:7cqw;letter-spacing:.16em;color:#2F6BC4}
 .cfr .num::before,.cfr .num::after{content:"";width:9cqw;height:1px;background:#A9CDF5}
 .cfr .orb{position:absolute;left:50%;top:46%;width:48cqw;height:48cqw;margin:-24cqw 0 0 -24cqw;border-radius:50%;display:grid;place-items:center;background:linear-gradient(160deg,#8FC0F2 0%,#4F8EDD 55%,#2F6BC4 100%);box-shadow:0 0 0 1.8cqw #fff,0 0 0 2.4cqw #BFD6F3}
+.cfr .suit{width:28cqw;height:28cqw}
 .cfr .gly{font-size:22cqw;line-height:1;color:#fff}
 .cfr .nm{position:absolute;left:0;right:0;bottom:8%;display:flex;flex-direction:column;align-items:center;gap:1.6cqw}
 .cfr .nm small{font-family:var(--f-latin);font-weight:700;font-size:5.2cqw;letter-spacing:.12em;color:#5B97E3;text-transform:uppercase;white-space:nowrap}
@@ -365,6 +366,32 @@ button.day:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(31,78,156,
 .ctab:hover .minis i:nth-child(3){transform:rotate(30deg) translateX(11px) translateY(-3px)}
 .spk{color:#fff;text-shadow:0 0 6px #fff;animation:twk 1.6s ease-in-out infinite}
 @keyframes twk{50%{opacity:.3;transform:scale(.7) rotate(45deg)}}
+.cele{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;overflow:hidden;background:rgba(10,22,48,.55);animation:fadeIn .3s ease both}
+@keyframes fadeIn{from{opacity:0}}
+.confetti{position:absolute;inset:0;pointer-events:none}
+.cf-p{position:absolute;top:-40px;left:var(--x);animation:fall var(--t) linear var(--dl) forwards}
+.cf-p.cb{width:16px;height:26px;border-radius:3px;font-size:7px}
+.cf-p.st{font-size:var(--s);color:var(--c);text-shadow:0 0 6px rgba(255,255,255,.8)}
+@keyframes fall{to{transform:translateY(115vh) rotate(var(--r))}}
+.cele-box{position:relative;width:100%;max-width:420px;background:#fff;border-radius:18px;border:1px solid #6B87AE;box-shadow:0 20px 60px rgba(0,0,0,.35);padding:60px 18px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;animation:winIn .5s cubic-bezier(.3,1.4,.5,1) both}
+.cele-seal{position:absolute;top:-42px;left:50%;margin-left:-46px;width:92px;height:92px;border-radius:16px;display:grid;place-items:center;font-family:var(--f-disp);font-weight:900;font-size:1.25rem;line-height:1.15;color:#fff;border:3px solid #fff;background:radial-gradient(circle at 35% 30%,#FFD29A,#F59124 60%,#C9701A);box-shadow:0 0 0 2px #C9701A,0 8px 18px rgba(201,112,26,.45);transform:rotate(-10deg);animation:thunkBig .6s .35s cubic-bezier(.3,1.8,.5,1) both}
+@keyframes thunkBig{from{transform:scale(2.6) rotate(-35deg);opacity:0}}
+.cele-title{font-family:var(--f-disp);font-weight:900;font-size:1.3rem;margin:0;color:#1C4689}
+.cele-friends{display:flex;justify-content:center;gap:2px;margin-top:4px}
+.cele-friends svg{width:52px;height:48px;opacity:0;transform:translateY(20px) scale(.6);animation:friendIn .45s cubic-bezier(.3,1.6,.5,1) forwards}
+.cele-friends svg.in{opacity:1;transform:none;animation:none}
+.cele-friends svg.in.talk{animation:hop .5s ease}
+@keyframes friendIn{to{opacity:1;transform:none}}
+@keyframes hop{50%{transform:translateY(-12px) scale(1.12)}}
+.say.cele-say{width:100%;margin:0;text-align:center;min-height:3.4em;background:#EEF4FC;border:1.5px solid #B7CDEB}
+.say.cele-say::after{display:none}
+.day.stamp::after{width:17px;height:17px;right:3px;bottom:3px;border-radius:4px;font-size:.58rem;border-width:1px}
+.day.stamp .n{left:5px;top:3px;font-size:.7rem}
+.day.stamp .r{left:5px;bottom:2px;font-size:.78rem}
+.day:has(.bigseal){box-shadow:0 0 0 2px #F59124;z-index:1}
+.bigseal{position:absolute;top:-9px;left:50%;transform:translateX(-50%);z-index:2;padding:1px 6px;border-radius:99px;white-space:nowrap;font-family:var(--f-disp);font-weight:900;font-size:.55rem;line-height:1.4;color:#6A3300;border:1px solid #C9701A;background:linear-gradient(180deg,#FFE9CC 0%,#FFC27A 48%,#F59124 52%,#FFB360 100%);pointer-events:none}
+.cal{padding-top:6px}
+@media (max-width:400px){.cele-friends svg{width:44px;height:41px}}
 .toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:#fff;border:2px solid var(--o3);border-radius:12px;padding:10px 16px;font-family:var(--f-disp);box-shadow:0 8px 24px rgba(31,78,156,.3);animation:toast .4s cubic-bezier(.3,1.5,.5,1)}
 @keyframes toast{from{transform:translate(-50%,40px);opacity:0}}
 @media (max-width:420px){.side{grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:12px}.h{font-size:1.1rem}.brand{font-size:1.25rem}.nav button{font-size:.82rem}.sh .tab span{display:none}.ch b{font-size:1.8rem}.c{width:calc((100% - 24px)/4)}.deck{gap:8px}}
@@ -408,6 +435,10 @@ img{max-width:100%}
     <symbol id="g2" viewBox="0 0 130 120"><g stroke="#1b1b1b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M28 74 C18 72 18 56 30 54 C28 42 42 36 50 42 C54 30 72 30 76 42 C86 36 98 46 92 56 C104 58 102 76 90 76 C88 92 72 96 60 92 C48 98 32 90 28 74Z" fill="#fff"/><g transform="rotate(-12 60 40)"><ellipse cx="60" cy="40" rx="34" ry="6" fill="#1b1b1b"/><path d="M49 40 L51 22 Q60 18 69 22 L71 40Z" fill="#1b1b1b"/></g><path d="M47 64 h8 M65 64 h8" fill="none"/><circle cx="60" cy="73" r="2.4" fill="#1b1b1b"/><path d="M98 22 h8 l-8 8 h8 M108 10 h6 l-6 6 h6" fill="none" stroke="#5B97E3" stroke-width="2.4"/><ellipse cx="44" cy="70" rx="5" ry="3" fill="#BFD8F8" stroke="none"/><ellipse cx="76" cy="70" rx="5" ry="3" fill="#BFD8F8" stroke="none"/></g></symbol>
     <symbol id="g3" viewBox="0 0 130 120"><g stroke="#1b1b1b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="60" cy="70" rx="31" ry="28" fill="#fff"/><path d="M48 97 q-4 8 4 9 M72 97 q4 8 -4 9 M30 74 q-9 3 -11 10" fill="none"/><path d="M88 72 L108 44" fill="none" stroke-width="3.4"/><ellipse cx="110" cy="41" rx="4" ry="6" transform="rotate(35 110 41)" fill="#F59124" stroke-width="2.2"/><rect x="46" y="24" width="28" height="20" rx="2" fill="#1b1b1b"/><rect x="43" y="42" width="34" height="5" rx="2" fill="#1b1b1b"/><path d="M60 26 V42" stroke="#5B97E3" stroke-width="2.2"/><circle cx="50" cy="66" r="6" fill="#1b1b1b"/><circle cx="70" cy="66" r="6" fill="#1b1b1b"/><circle cx="52" cy="64" r="2" fill="#fff" stroke="none"/><circle cx="72" cy="64" r="2" fill="#fff" stroke="none"/><path d="M57 77 q3 3 6 0" fill="none" stroke-width="2.2"/><ellipse cx="41" cy="76" rx="5" ry="3" fill="#BFD8F8" stroke="none"/><ellipse cx="79" cy="76" rx="5" ry="3" fill="#BFD8F8" stroke="none"/></g></symbol>
     <symbol id="g4" viewBox="0 0 130 120"><g stroke="#1b1b1b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M30 62 C28 40 46 32 60 32 C76 32 92 40 90 64 C89 86 76 98 60 98 C42 98 31 86 30 62Z" fill="#fff"/><path d="M47 97 q-5 9 5 10 M73 97 q5 9 -5 10 M31 68 q-11 3 -14 12" fill="none"/><path d="M98 102 L102 46" fill="none" stroke-width="3.4"/><circle cx="102" cy="40" r="6" fill="#F59124" stroke-width="2.2"/><path d="M89 72 q8 0 12 -6" fill="none"/><path d="M44 72 Q60 114 76 72 Q68 80 60 78 Q52 80 44 72Z" fill="#fff"/><path d="M54 86 q2 6 0 12 M66 86 q-2 6 0 12" fill="none" stroke-width="1.6"/><ellipse cx="60" cy="35" rx="40" ry="7.5" fill="#1b1b1b"/><path d="M47 35 L49 14 Q60 9 71 14 L73 35Z" fill="#1b1b1b"/><circle cx="50" cy="60" r="7" fill="none" stroke-width="2.2"/><circle cx="70" cy="60" r="7" fill="none" stroke-width="2.2"/><path d="M57 60 h6" fill="none" stroke-width="2.2"/><circle cx="50" cy="60" r="2" fill="#1b1b1b"/><circle cx="70" cy="60" r="2" fill="#1b1b1b"/><path d="M43 51 q6 -3 12 0 M65 51 q6 -3 12 0" fill="none" stroke="#5B97E3" stroke-width="2.4"/></g></symbol>
+    <symbol id="suit0" viewBox="0 0 28 28"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 23 L21 5"/><path d="M19 7.5 c2.5-1 4 0 4.5 1.5 c-2 .5-3.5 0-4.5-1.5z M14.5 13 c2.5-1 4 0 4.5 1.5 c-2 .5-3.5 0-4.5-1.5z M12.5 12 c-1-2.5 0-4 1.5-4.5 c.5 2 0 3.5-1.5 4.5z" fill="#fff"/><circle cx="21.5" cy="4.5" r="1.6" fill="#fff"/></g></symbol>
+    <symbol id="suit1" viewBox="0 0 28 28"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5 H21 C21 12 18 15 14 15 C10 15 7 12 7 5Z" fill="rgba(255,255,255,.35)"/><path d="M14 15 V21 M9 23 H19"/><path d="M8 8 H20"/></g></symbol>
+    <symbol id="suit2" viewBox="0 0 28 28"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3 L16 7 V18 H12 V7Z" fill="rgba(255,255,255,.35)"/><path d="M8 18 H20 M14 18 V23"/><circle cx="14" cy="24.5" r="1.4" fill="#fff"/></g></symbol>
+    <symbol id="suit3" viewBox="0 0 28 28"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="10"/><path d="M14 5.5 L16.3 11.6 L22.6 11.8 L17.7 15.8 L19.4 21.9 L14 18.4 L8.6 21.9 L10.3 15.8 L5.4 11.8 L11.7 11.6Z" stroke-width="1.6" fill="rgba(255,255,255,.35)"/></g></symbol>
     <symbol id="g5" viewBox="0 0 130 120"><g stroke="#1b1b1b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M36 50 L33 26 L50 39Z M84 50 L87 26 L70 39Z" fill="#fff"/><path d="M88 86 q22 0 16 -22 q-3 -8 -9 -3" fill="none"/><path d="M30 62 C28 40 46 34 60 34 C76 34 92 40 90 64 C89 86 76 98 60 98 C42 98 31 86 30 62Z" fill="#fff"/><path d="M37 31 L41 40 M83 31 L79 40" fill="none" stroke="#5B97E3" stroke-width="2.2"/><path d="M47 97 q-5 9 5 10 M73 97 q5 9 -5 10" fill="none"/><ellipse cx="60" cy="35" rx="19" ry="4" fill="#1b1b1b"/><path d="M53 35 L54 22 Q60 18 66 22 L67 35Z" fill="#1b1b1b"/><ellipse cx="50" cy="61" rx="3" ry="4" fill="#1b1b1b"/><ellipse cx="70" cy="61" rx="3" ry="4" fill="#1b1b1b"/><path d="M54 70 q3 3 6 0 q3 3 6 0" fill="none" stroke-width="2.2"/><path d="M36 66 h-10 M36 71 h-9 M84 66 h10 M84 71 h9" fill="none" stroke-width="1.6"/><circle cx="60" cy="88" r="4" fill="#F59124" stroke-width="1.8"/></g></symbol>
   </defs>
 </svg>
@@ -527,10 +558,11 @@ img{max-width:100%}
     <!-- CARDS -->
     <section class="screen" data-s="cards">
       <div class="stack">
-        <div class="sh"><div class="tab"><b>오늘의 카드 ☆彡</b><span>22장 중 한 장</span></div><div class="bar"><b>메이저 아르카나 22장</b><span>마음이 가는 카드를 하나 골라요</span></div></div>
+        <div class="sh"><div class="tab"><b>오늘의 카드 ☆彡</b><span>78장 중 한 장</span></div><div class="bar"><b>78장 덱에서 22장을 펼쳤어요</b><span>마음이 가는 카드를 하나 골라요</span></div></div>
         <div class="pad ctrl">
           <p class="txt" id="cHint">카드가 바닥에 깔려 있어요. 하나를 눌러 뒤집어 보세요.</p>
           <div class="seg" role="group" aria-label="보기 방식"><button data-view="grid" aria-pressed="true">바닥에 펼치기</button><button data-view="row" aria-pressed="false">한 줄로 보기</button></div>
+          <button class="gloss gray" id="shuffleBtn" type="button">섞기 ↻</button>
         </div>
         <div class="pad guide"><svg class="mascot" viewBox="0 0 130 120" aria-hidden="true"><use href="#g0"/></svg><p class="say left" id="cSay"></p></div>
         <div class="floor"><div class="deck" id="deck"></div></div>
@@ -603,6 +635,7 @@ img{max-width:100%}
           <div class="stat"><b id="sHit">–</b><span>내가 느낀 적중률</span></div>
         </div>
         <p class="pad small">적중률은 매일 저녁 직접 고른 답으로 계산돼요. 지난 기록 중 예시가 섞여 있다면 생년월일을 넣을 때 사라져요.</p>
+        <div class="pad"><button class="textlink" id="celePreview" type="button">✦ 7일 연속 축하 연출 미리 보기</button></div>
       </div>
     </section>
 
@@ -610,6 +643,17 @@ img{max-width:100%}
       <span>by 오늘운 ◦ 2026</span>
       <nav><button id="logout" hidden>로그아웃</button><span id="logoutSep" hidden>|</span><button id="lockBtn">🔒 잠금</button><span id="lockSep">|</span><button id="editMe">내 사주 수정</button><span>|</span><button id="replay">처음부터 보기</button><span>|</span><button id="resetAll">모두 지우기</button></nav>
     </footer>
+  </div>
+</div>
+<div class="cele" id="cele" hidden role="dialog" aria-modal="true" aria-labelledby="celeTitle">
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="cele-box">
+    <div class="cele-seal" id="celeSeal" aria-hidden="true"></div>
+    <h2 class="cele-title" id="celeTitle"></h2>
+    <p class="small" id="celeSub"></p>
+    <div class="cele-friends" id="celeFriends"></div>
+    <p class="say cele-say" id="celeSay" aria-live="polite"></p>
+    <button class="gloss acc lg" id="celeClose" type="button">고마워! ✦</button>
   </div>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -667,6 +711,78 @@ const CARDS=[
 ["XIX","태양","The Sun","☀","기쁨","기쁨과 성공, 활력의 카드예요. 숨김없이 밝게 드러나는 시기예요.","자신 있게 나를 드러내 보세요."],
 ["XX","심판","Judgement","♫","깨어남","부름과 깨어남, 재평가를 뜻해요. 지난날을 돌아보고 새롭게 일어서는 때예요.","지난 노력을 인정하고 다음 단계를 정하세요."],
 ["XXI","세계","The World","◯","완성","완성과 성취, 한 사이클의 마무리를 뜻해요. 모든 것이 제자리를 찾아요.","끝낸 일을 축하하고 다음 여행을 준비하세요."]];
+/* ===== 마이너 아르카나 56장 [번호,이름,영문,달력기호,키워드,의미,조언,무늬] ===== */
+(()=>{
+const SUITS=[
+ {ko:"완드",en:"Wands",h:"火",cards:[
+  ["새로운 열정","가슴을 뛰게 하는 새 계획이나 아이디어가 싹트는 카드예요.","떠오른 아이디어를 오늘 바로 적어두세요."],
+  ["계획과 선택","손에 쥔 것을 넘어 더 넓은 세계를 내다보는 시기예요.","다음 목표를 구체적으로 그려보세요."],
+  ["확장과 기다림","시작한 일이 멀리서 결과를 싣고 돌아오는 중이에요.","조급해하지 말고 시야를 넓게 두세요."],
+  ["축하와 안정","작은 성취를 함께 기뻐하는 따뜻한 자리의 카드예요.","오늘의 작은 성공을 누군가와 나누세요."],
+  ["경쟁과 마찰","의견이 부딪히며 힘이 여기저기 흩어지는 상황이에요.","이기려 하기보다 규칙을 먼저 정해 보세요."],
+  ["승리와 인정","노력이 인정받고 박수를 받는 카드예요.","칭찬을 겸손하게, 하지만 기쁘게 받으세요."],
+  ["지키는 용기","내 자리를 지키기 위해 버텨야 하는 순간이에요.","중요한 것 하나만큼은 양보하지 마세요."],
+  ["빠른 진행","일이 한꺼번에 빠르게 움직이고 소식이 날아드는 카드예요.","답장은 미루지 말고 바로 하세요."],
+  ["끈기와 경계","지쳤지만 거의 다 왔어요. 마지막 고비를 넘기는 카드예요.","조금만 더 버티되 쉬는 시간도 챙기세요."],
+  ["무거운 짐","너무 많은 책임을 혼자 짊어진 상태예요.","하나는 내려놓거나 도움을 요청하세요."],
+  ["설레는 소식","호기심 가득한 새 출발이나 반가운 소식의 카드예요.","해보고 싶던 것을 가볍게 시도해 보세요."],
+  ["대담한 돌진","열정적으로 뛰어들지만 성급해질 수 있는 카드예요.","출발 전에 한 번만 점검하세요."],
+  ["당당한 매력","자신감과 따뜻한 카리스마로 주변을 이끄는 카드예요.","나를 드러내는 걸 망설이지 마세요."],
+  ["비전과 리더십","큰 그림을 보고 사람들을 움직이는 카드예요.","방향을 정해 먼저 앞장서 보세요."]]},
+ {ko:"컵",en:"Cups",h:"水",cards:[
+  ["새로운 감정","마음이 차오르고 새로운 사랑이나 우정이 시작되는 카드예요.","마음이 시키는 다정한 일을 하나 해보세요."],
+  ["마음의 교감","서로 마음이 통하는 관계, 화해와 약속의 카드예요.","고마운 사람에게 마음을 표현하세요."],
+  ["축하와 우정","친구들과 함께 기뻐하고 어울리는 즐거운 카드예요.","좋아하는 사람들과 시간을 보내세요."],
+  ["권태와 무관심","눈앞의 기회에 시큰둥해진 상태예요.","지금 가진 것 중 고마운 것을 떠올려 보세요."],
+  ["상실과 아쉬움","잃은 것에 마음이 머물러 남은 것을 못 보는 카드예요.","아직 남아 있는 좋은 것을 세어 보세요."],
+  ["추억과 순수","옛 기억과 어린 시절의 다정함이 떠오르는 카드예요.","오랜 친구에게 안부를 전해 보세요."],
+  ["많은 선택지","상상과 가능성은 많지만 무엇이 진짜인지 헷갈리는 카드예요.","현실적인 것 하나만 골라 보세요."],
+  ["떠남과 탐색","익숙한 것을 두고 더 의미 있는 것을 찾아 떠나는 카드예요.","마음이 떠난 일은 정리할 때를 생각해 보세요."],
+  ["소원 성취","바라던 것이 이루어져 마음이 흡족한 카드예요.","작은 사치로 나를 칭찬해 주세요."],
+  ["행복한 관계","가족과 소중한 사람들 사이의 조화와 행복의 카드예요.","가까운 사람과 따뜻한 시간을 보내세요."],
+  ["다정한 소식","마음을 두드리는 메시지나 새로운 감성이 찾아와요.","직감이나 꿈을 가볍게 흘려듣지 마세요."],
+  ["로맨틱한 제안","마음을 담은 제안이나 초대가 오는 카드예요.","감정을 솔직하고 부드럽게 전하세요."],
+  ["깊은 공감","다른 사람의 마음을 잘 헤아리는 따뜻한 카드예요.","남을 챙기는 만큼 나도 챙기세요."],
+  ["감정의 균형","감정에 휩쓸리지 않고 차분하게 다독이는 카드예요.","흥분될 때 한 박자 쉬고 말하세요."]]},
+ {ko:"소드",en:"Swords",h:"金",cards:[
+  ["명료한 진실","머릿속이 맑아지며 핵심을 꿰뚫는 깨달음의 카드예요.","애매한 것은 분명하게 말해 보세요."],
+  ["망설임","결정을 미룬 채 눈을 가리고 있는 교착 상태예요.","피하던 선택지를 한 번 똑바로 보세요."],
+  ["마음의 상처","아픈 말이나 실망으로 마음이 쓰린 카드예요.","속상한 마음을 글로 적어 흘려보내세요."],
+  ["휴식과 회복","잠시 멈추고 쉬면서 힘을 되찾는 카드예요.","오늘은 일부러라도 푹 쉬세요."],
+  ["씁쓸한 승리","이겼지만 관계를 잃을 수 있는 갈등의 카드예요.","이기는 것보다 무엇을 지킬지 생각하세요."],
+  ["평온으로 이동","힘든 시기를 지나 잔잔한 곳으로 옮겨가는 카드예요.","마음이 편해지는 쪽으로 천천히 움직이세요."],
+  ["꾀와 전략","몰래 혹은 영리하게 일을 처리하려는 카드예요.","지름길이 정직한 길인지 확인하세요."],
+  ["갇힌 생각","스스로 만든 걱정에 묶여 움직이지 못하는 카드예요.","출구는 생각보다 가까워요. 한 걸음만 떼세요."],
+  ["불안과 걱정","밤잠을 설치게 하는 걱정이 커진 카드예요.","걱정을 누군가에게 말해 크기를 줄여보세요."],
+  ["끝과 바닥","더 내려갈 곳 없는 지점, 이제 올라갈 일만 남은 카드예요.","끝난 것은 끝났다고 인정하고 새날을 맞으세요."],
+  ["호기심과 관찰","새로운 정보를 캐고 배우려는 날카로운 카드예요.","궁금한 것을 하나 찾아보고 배워보세요."],
+  ["빠른 결단","생각보다 빨리 돌진하는 카드예요. 말이 앞설 수 있어요.","보내기 전에 메시지를 한 번 더 읽어보세요."],
+  ["냉철한 지혜","감정보다 사실로 정확히 판단하는 카드예요.","필요한 경계선을 분명히 그으세요."],
+  ["공정한 판단","논리와 원칙으로 결정을 내리는 카드예요.","감정이 아닌 기준으로 결정하세요."]]},
+ {ko:"펜타클",en:"Pentacles",h:"土",cards:[
+  ["새로운 기회","돈이나 일, 건강에서 실속 있는 시작이 열리는 카드예요.","작은 저축이나 좋은 습관을 하나 시작하세요."],
+  ["저글링","여러 일을 동시에 굴리며 균형을 잡는 카드예요.","우선순위를 정해 하나씩 처리하세요."],
+  ["협업과 실력","함께 일하며 솜씨를 인정받는 카드예요.","다른 사람의 의견을 들어 완성도를 높이세요."],
+  ["지키기","가진 것을 꽉 쥐고 안정을 지키려는 카드예요.","아끼되, 너무 움켜쥐지는 마세요."],
+  ["어려움과 결핍","돈이나 마음이 춥게 느껴지는 시기예요.","도움을 청하는 것도 용기예요."],
+  ["나눔","주고받는 균형, 베풀고 도움받는 카드예요.","작은 것이라도 누군가에게 나눠 보세요."],
+  ["기다림과 점검","심은 것이 자라길 기다리며 결과를 점검하는 카드예요.","지금까지의 노력을 한번 돌아보세요."],
+  ["성실한 연습","한 가지를 꾸준히 갈고닦는 장인의 카드예요.","오늘 해야 할 일을 정성껏 끝내세요."],
+  ["여유와 자립","스스로 일군 풍요를 누리는 카드예요.","나를 위한 작은 선물을 해보세요."],
+  ["든든한 기반","가족과 재산, 오래가는 안정의 카드예요.","길게 보고 계획을 세워보세요."],
+  ["배움의 시작","새로운 공부나 일을 성실하게 시작하는 카드예요.","배우고 싶은 것을 오늘 10분만 해보세요."],
+  ["꾸준함","느려도 확실하게 나아가는 카드예요.","화려함보다 끝까지 하는 게 중요해요."],
+  ["살뜰한 돌봄","생활과 몸을 실속 있게 챙기는 카드예요.","잘 먹고 잘 자는 것부터 챙기세요."],
+  ["풍요와 성공","일과 재물에서 안정된 성취를 이루는 카드예요.","쌓은 것을 지혜롭게 굴려 보세요."]]}];
+const NUM=["ACE","II","III","IV","V","VI","VII","VIII","IX","X","PAGE","KNIGHT","QUEEN","KING"];
+const RKO=["에이스","2","3","4","5","6","7","8","9","10","시종","기사","여왕","왕"];
+const REN=["Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Page","Knight","Queen","King"];
+SUITS.forEach((su,si)=>su.cards.forEach((t,ri)=>CARDS.push([NUM[ri],`${su.ko} ${RKO[ri]}`,`${REN[ri]} of ${su.en}`,su.h,t[0],t[1],t[2],si])));
+})();
+/* 무늬 → 오행 (완드 화, 컵 수, 소드 금, 펜타클 토) */
+const SUIT_EL=[1,4,3,2],SUIT_KO=["완드","컵","소드","펜타클"];
+const SUIT_TOPIC=["완드는","컵은","소드는","펜타클은"];
+
 
 /* ===== 상태 ===== */
 const KEY="oneul-un-v3";
@@ -829,6 +945,35 @@ const nextGuide=()=>{gi=(gi+1)%GUIDES.length};
 function paintGuide(){document.querySelectorAll(".mascot use,.peek use").forEach(u=>u.setAttribute("href","#g"+gi))}
 const say=(el,txt)=>{el.innerHTML=`${txt}<span class="who">— ${G().name}</span>`;el.style.animation="none";el.offsetHeight;el.style.animation=""};
 
+
+/* ===== 7일 연속 축하 ===== */
+const SPREAD=22;
+const CHEER=[n=>`${n}일 연속이라니, 진짜 최고야!`,n=>`장하오! ${n}일을 하루도 거르지 않았구려.`,n=>`음냐… 나 자는 동안… ${n}일이나 했어…? 대단해…`,n=>`${n}일 연속이에여! 너무 멋져여 (≧▽≦)`,n=>`허허, 꾸준함이 곧 복이로구나. ${n}일이라니 장하다!`,n=>`${n}일 개근이다냥! 츄르 파티다냥 =^･ω･^=`];
+function hanjaNum(n){const d="〇一二三四五六七八九";if(n<10)return d[n];if(n>=100)return String(n);const t=Math.floor(n/10),o=n%10;return (t>1?d[t]:"")+"十"+(o?d[o]:"")}
+function streakNow(){let s=0,d=new Date(now);if(!(state.days[TODAY]&&state.days[TODAY].mission))d.setDate(d.getDate()-1);while(state.days[dkey(d)]&&state.days[dkey(d)].mission){s++;d.setDate(d.getDate()-1)}return s}
+let celeT=null,celeK=0;
+function celebrate(n){
+  $("cele").hidden=false;
+  $("celeSeal").innerHTML=`${hanjaNum(n)}日<br>開勤`;
+  $("celeTitle").textContent=`${n}일 연속 미션 성공!`;
+  $("celeSub").textContent=`갓 친구들이 다 같이 축하하러 왔어요`;
+  $("celeFriends").innerHTML=GUIDES.map((g,i)=>`<svg viewBox="0 0 130 120" style="animation-delay:${(.7+i*.12).toFixed(2)}s" aria-hidden="true"><use href="#g${i}"/></svg>`).join("");
+  const cf=$("confetti");cf.innerHTML="";
+  for(let i=0;i<40;i++){const el=document.createElement("span"),card=i%3===0;el.className="cf-p "+(card?"cb":"st");if(!card)el.textContent="✦";
+    el.style.cssText=`--x:${Math.random()*100}%;--t:${(2.6+Math.random()*2.4).toFixed(2)}s;--dl:${(Math.random()*1.2).toFixed(2)}s;--r:${Math.round(Math.random()*720-360)}deg;--s:${12+Math.round(Math.random()*14)}px;--c:${Math.random()<.5?"#F59124":"#fff"}`;
+    cf.appendChild(el)}
+  celeK=0;$("celeSay").innerHTML="";clearInterval(celeT);
+  const talk=()=>{const fs=[...$("celeFriends").children];fs.forEach((f,i)=>{f.classList.remove("talk");if(i===celeK){void f.getBoundingClientRect();f.classList.add("talk")}});
+    $("celeSay").innerHTML=`${CHEER[celeK](n)}<span class="who">— ${GUIDES[celeK].name}</span>`;celeK=(celeK+1)%GUIDES.length};
+  setTimeout(()=>{if($("cele").hidden)return;[...$("celeFriends").children].forEach(f=>f.classList.add("in"));talk();celeT=setInterval(talk,1700)},1900);
+  setTimeout(()=>$("celeClose").focus({preventScroll:true}),600);
+}
+function closeCele(){clearInterval(celeT);$("cele").hidden=true;if(document.querySelector('.screen.on[data-s="record"]'))renderRecord()}
+$("celeClose").onclick=closeCele;
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!$("cele").hidden)closeCele()});
+$("celePreview").onclick=()=>celebrate(7);
+$("shuffleBtn").onclick=()=>{const d=$("deck");d.dataset.order="";renderCards();toast("카드를 다시 섞었어요 ↻")};
+
 /* ===== 화면 ===== */
 function go(s,opts={}){
   nextGuide();paintGuide();
@@ -860,13 +1005,15 @@ function renderHome(){
   $("hCta").innerHTML=c?`<div class="row"><p class="txt">오늘 고른 카드는 <span class="lb">${c[3]} ${c[1]}</span></p><button class="gloss acc" data-go="detail">카드 해설 보기 ▶</button></div>`
     :`<button class="ctab" data-go="cards"><span class="minis" aria-hidden="true"><i class="cb"></i><i class="cb"></i><i class="cb"></i></span><span class="lbl">오늘의 카드 뽑으러 가기</span><span class="spk" aria-hidden="true">✦</span></button>`;
 }
-function cardFace(ci){const c=CARDS[ci];return`<div class="ci"><div class="cf cb"></div><div class="cf cfr"><span class="ring"></span><i class="s s1">✦</i><i class="s s2">✦</i><i class="s s3">✦</i><i class="s s4">✦</i><div class="num">${c[0]}</div><div class="orb"><span class="gly">${c[3]}</span></div><div class="nm"><small>${c[2]}</small><b>${c[1]}</b></div><span class="holo"></span><span class="glare"></span></div></div>`}
+function cardFace(ci){const c=CARDS[ci];return`<div class="ci"><div class="cf cb"></div><div class="cf cfr"><span class="ring"></span><i class="s s1">✦</i><i class="s s2">✦</i><i class="s s3">✦</i><i class="s s4">✦</i><div class="num">${c[0]}</div>${c[7]!=null?`<div class="orb"><svg class="suit" viewBox="0 0 28 28" aria-hidden="true"><use href="#suit${c[7]}"/></svg></div>`:`<div class="orb"><span class="gly">${c[3]}</span></div>`}<div class="nm"><small>${c[2]}</small><b>${c[1]}</b></div><span class="holo"></span><span class="glare"></span></div></div>`}
 function renderCards(){
   const deck=$("deck"),e=state.days[TODAY]||{},picked=e.card!=null;
   deck.className="deck"+(view==="row"?" row":"");
   document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===view?"true":"false"));
-  if(!deck.dataset.order){deck.dataset.order=JSON.stringify([...CARDS.keys()].sort(()=>Math.random()-.5))}
+  if(!deck.dataset.order){deck.dataset.order=JSON.stringify([...CARDS.keys()].sort(()=>Math.random()-.5).slice(0,SPREAD))}
   const order=JSON.parse(deck.dataset.order);
+  if(picked&&!order.includes(e.card)){order[Math.floor(Math.random()*order.length)]=e.card;deck.dataset.order=JSON.stringify(order)}
+  $("shuffleBtn").disabled=picked;
   deck.innerHTML="";
   order.forEach((ci,i)=>{
     const b=document.createElement("button");b.type="button";b.className="c";
@@ -909,6 +1056,7 @@ function renderDetail(){
   const big=$("bigCard");bindTilt(big);big.innerHTML=cardFace(e.card);big.classList.remove("flip");requestAnimationFrame(()=>requestAnimationFrame(()=>big.classList.add("flip")));
   $("dTitle").textContent=c[1];$("dKw").textContent=c[4];$("dMean").textContent=c[5];$("dAdv").textContent=c[6];
   $("dMix").textContent=`사주로 본 오늘은 「${F.A[0]}」, 카드는 「${c[4]}」. 두 흐름을 함께 기억해 보세요.`;
+  if(c[7]!=null){const ce=SUIT_EL[c[7]];$("dMix").textContent+=` ${SUIT_TOPIC[c[7]]} ${EL[ce]}(${ELH[ce]})의 기운을 품은 무늬예요.`+(ce===F.min?" 내 사주에 가장 부족한 기운을 채워주는 카드라 반가운 만남이에요!":ce===F.max?" 내 사주에 이미 넉넉한 기운이라, 과하지 않게 조절하면 좋아요.":"")}
   $("dMis").textContent=`오늘의 미션: ${F.A[4]}`;
   say($("dSay"),G().detail(c[1],c[4]));
   document.querySelectorAll("#verd button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===e.verdict?"true":"false"));
@@ -965,7 +1113,7 @@ function renderRecord(){
   for(let d=1;d<=last;d++){const k=`${y}-${pad(m+1)}-${pad(d)}`,e=state.days[k],el=document.createElement("button");
     el.type="button";el.className="day"+(k===TODAY?" today":"")+(e&&e.mission?" stamp":"")+(e&&e.note?" noted":"")+(k===selDay?" sel":"");
     el.setAttribute("aria-label",`${m+1}월 ${d}일 기록 보기`);el.setAttribute("aria-pressed",k===selDay?"true":"false");
-    el.innerHTML=`<span class="n">${d}</span>`+(e&&e.card!=null?`<span class="r">${CARDS[e.card][3]}</span>`:"");
+    el.innerHTML=`<span class="n">${d}</span>`+(e&&e.card!=null?`<span class="r">${CARDS[e.card][3]}</span>`:"")+(state.cele&&state.cele[k]?`<span class="bigseal">${hanjaNum(state.cele[k])}日</span>`:"");
     el.onclick=()=>{selDay=k;renderRecord()};cal.appendChild(el)}
   renderDayLog();
   const all=Object.values(state.days).filter(e=>e.card!=null||e.mission||e.verdict);
@@ -979,7 +1127,7 @@ function renderRecord(){
 let ob=0;
 const OB=[
  ()=>`<div class="step"><div class="speak"><svg class="mascot" viewBox="0 0 130 120" aria-hidden="true"><use href="#g${gi}"/></svg><div class="bubbletxt">${G().greet}<span class="small" style="display:block;margin-top:4px">— ${G().name}</span></div></div><p class="txt">갓 쓴 여섯 친구가 날마다, 화면마다 번갈아 나와요. 오늘운은 사주로 하루의 흐름을 읽고, 타로 한 장으로 마음을 비춰보고, 작은 미션으로 하루를 바꿔보는 앱이에요.</p></div>`,
- ()=>`<div class="step"><h2 class="h">이렇게 써요</h2><div class="how"><div><b>柱</b><p><b style="all:unset;font-weight:800">사주 보기</b><br><span class="small">생년월일시로 내 여덟 글자를 계산하고, 오늘의 일진과 비교해요.</span></p></div><div><b>☆</b><p><b style="all:unset;font-weight:800">카드 한 장</b><br><span class="small">바닥에 깔린 22장 중 하나를 골라 해설을 들어요.</span></p></div><div><b>完</b><p><b style="all:unset;font-weight:800">미션과 도장</b><br><span class="small">미션을 끝내면 도장, 저녁엔 맞았는지 한 줄 기록.</span></p></div></div></div>`,
+ ()=>`<div class="step"><h2 class="h">이렇게 써요</h2><div class="how"><div><b>柱</b><p><b style="all:unset;font-weight:800">사주 보기</b><br><span class="small">생년월일시로 내 여덟 글자를 계산하고, 오늘의 일진과 비교해요.</span></p></div><div><b>☆</b><p><b style="all:unset;font-weight:800">카드 한 장</b><br><span class="small">78장 덱에서 펼친 카드 중 하나를 골라 해설을 들어요.</span></p></div><div><b>完</b><p><b style="all:unset;font-weight:800">미션과 도장</b><br><span class="small">미션을 끝내면 도장, 저녁엔 맞았는지 한 줄 기록.</span></p></div></div></div>`,
  ()=>`<div class="step"><div class="speak"><svg class="mascot" viewBox="0 0 130 120" aria-hidden="true"><use href="#g${gi}"/></svg><div class="bubbletxt">${G().birth}<span class="small" style="display:block;margin-top:4px">— ${G().name}</span></div></div>
   <form class="bform" id="bf" onsubmit="return false">
   <div class="fgroup"><div class="frow"><label for="bName">부를 이름</label><span class="opt">선택</span></div><input id="bName" placeholder="예: 홍길동" value="${state.birth&&state.birth.name||""}"></div>
@@ -1037,7 +1185,7 @@ function splash(){
     Object.assign(c.style,{"--sx":Math.cos(ang)*r+"px","--sy":Math.sin(ang)*r+"px","--sr":(Math.random()*720-360)+"deg","--fx":off*24+"px","--fy":(-150+Math.abs(off)*7)+"px","--fr":off*10+"deg","--dl":(i*.07)+"s"});
     sp.appendChild(c)}
   const tj=dayPillar(now.getFullYear(),now.getMonth()+1,now.getDate());
-  const msgs=["카드 22장을 섞는 중…",`오늘의 일진 ${ST[tj.s]}${BR[tj.b]}日 읽는 중…`,state.birth?"내 여덟 글자와 맞추는 중…":"갓 쓴 친구들을 부르는 중…"];
+  const msgs=["카드 78장을 섞는 중…",`오늘의 일진 ${ST[tj.s]}${BR[tj.b]}日 읽는 중…`,state.birth?"내 여덟 글자와 맞추는 중…":"갓 쓴 친구들을 부르는 중…"];
   let mi=0;const spm=$("spMsg"),showMsg=()=>{spm.textContent=msgs[mi];spm.style.animation="none";spm.offsetHeight;spm.style.animation="";mi++};showMsg();
   const mt=setInterval(()=>{if(mi<msgs.length)showMsg();else clearInterval(mt)},1000);
   let done=false;const end=()=>{if(done)return;done=true;sp.classList.add("out");setTimeout(()=>sp.hidden=true,500);if(state.birth){$("app").hidden=false;renderMarq();go("home")}else openOb(0)};
@@ -1047,7 +1195,9 @@ function splash(){
 /* ===== 이벤트 ===== */
 document.addEventListener("click",ev=>{const g=ev.target.closest("[data-go]");if(g){ev.preventDefault();go(g.dataset.go)}});
 document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{view=b.dataset.view;renderCards()});
-$("stampBtn").onclick=()=>{const e=today();e.mission=!e.mission;save();renderHome();if(e.mission)toast(`${G().name}: ${G().stamp}`)};
+$("stampBtn").onclick=()=>{const e=today();e.mission=!e.mission;state.cele=state.cele||{};let n=0;
+  if(e.mission){n=streakNow();if(n>0&&n%7===0&&!state.cele[TODAY])state.cele[TODAY]=n;else n=0}else delete state.cele[TODAY];
+  save();renderHome();if(e.mission){if(n)setTimeout(()=>celebrate(n),450);else toast(`${G().name}: ${G().stamp}`)}};
 $("verd").onclick=ev=>{const b=ev.target.closest("button");if(!b)return;const e=today();e.verdict=e.verdict===b.dataset.v?null:b.dataset.v;save();document.querySelectorAll("#verd button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===e.verdict?"true":"false"))};
 $("saveNote").onclick=()=>{const e=today();e.note=$("note").value.trim();save();toast("오늘 일기를 저장했어요 ✎")};
 $("reBirth").onclick=()=>openOb(2,true);
