@@ -329,6 +329,15 @@ button.day:hover{transform:translateY(-2px);box-shadow:0 3px 6px rgba(31,78,156,
 .dl-list em.no{color:var(--muted);background:#EEF1F5}
 .dl-note{position:relative;background:#F6F9FD;border-radius:10px;padding:10px 12px 10px 28px;font-size:.88rem;color:#2B2F36;line-height:1.6}
 .dl-note .q{position:absolute;left:10px;top:4px;font-family:var(--f-latin);font-size:1.4rem;color:var(--b3)}
+.late{display:flex;flex-direction:column;gap:10px;padding-top:12px;border-top:1px dashed #E3E8EF}
+.late-q{margin:0;font-size:.88rem;line-height:1.55;color:#2B2F36}
+.late-q b{color:var(--b5,#1C4689)}
+.verd.sm button{font-size:.8rem;padding-left:12px;padding-right:12px}
+.late textarea{min-height:64px}
+.late-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.late-nudge{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#F4F8FD;border:1px dashed #BFD6F3;border-radius:14px;margin:0 16px 4px;padding:12px 14px!important}
+.late-nudge[hidden]{display:none}
+.late-nudge .lq{font-size:.86rem;font-weight:800;color:#1C4689;min-width:0}
 .dl-empty{font-size:.82rem;color:var(--muted);margin:0}
 @media (max-width:420px){.dl-body{grid-template-columns:1fr}.day.stamp::after{width:18px;height:18px;font-size:.62rem;right:3px;bottom:3px}}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
@@ -610,6 +619,7 @@ img{max-width:100%}
           </div>
         </div>
         <div class="pad cta" id="hCta"></div>
+        <div class="pad late-nudge" id="hLate" hidden></div>
       </div>
     </section>
 
@@ -654,6 +664,7 @@ img{max-width:100%}
           <div class="verd" id="verd"><button class="gloss gray" data-v="hit" aria-pressed="false">맞았어요 (≧▽≦)</button><button class="gloss gray" data-v="half" aria-pressed="false">반쯤 (・_・)</button><button class="gloss gray" data-v="miss" aria-pressed="false">빗나감 (｡•́︿•̀｡)</button></div>
           <label class="small" for="note">한 줄 기록</label>
           <textarea id="note" placeholder="예: 정말 예상 못한 데서 연락이 왔다"></textarea>
+          <p class="small">늦어도 괜찮아요. 지난 7일 일기는 기록 탭에서 날짜를 눌러 쓸 수 있어요.</p>
           <div class="row"><button class="gloss gray" data-go="home">← 홈으로</button><button class="gloss blue" id="saveNote">기록하기</button></div>
           <div class="cta"><button class="gloss gray" id="shareBtn2" type="button">📷 카드와 운세 공유 이미지</button></div>
         </div>
@@ -1583,6 +1594,9 @@ function renderMarq(){
 }
 function renderHome(){
   F=compute();const e=state.days[TODAY]||{};
+  {const yd=new Date(now);yd.setDate(yd.getDate()-1);const yk=dkey(yd),ye=state.days[yk],box=$("hLate");
+   if(ye&&!ye.ex&&(ye.card!=null||ye.mission)&&!ye.verdict&&!ye.note&&state.birth){const t=computeDay(yd,birthSaju(state.birth)).title;
+     box.innerHTML=`<span class="lq">어제 「${t}」, 맞았나요?</span><button type="button" class="gloss blue" data-late="${yk}">어제 일기 쓰기 ✎</button>`;box.hidden=false}else box.hidden=true}
   $("hWho").textContent=`${who()}에게 오늘은요`;
   $("hBar").textContent=`${now.getMonth()+1}월 ${now.getDate()}일 ◦ ${ST[F.tj.s]}${BR[F.tj.b]}日 ◦ ${stars(F.total)}`;
   $("hIj").textContent=ST[F.tj.s]+BR[F.tj.b];$("hIjK").textContent=`${STK[F.tj.s]}${BRK[F.tj.b]}일 · ${F.g1}`;
@@ -1697,7 +1711,26 @@ function renderDayLog(){
     </ul></div>
     <div class="dl-note">${e.note?`<span class="q">“</span>${esc(e.note)}`:`<span class="dl-empty">남긴 일기가 없어요.</span>`}</div>`)+
    (k===TODAY&&c?`<div><button class="gloss gray" data-go="detail">오늘 일기 쓰러 가기 ✎</button></div>`:"");
+  if(canLate(k)&&state.birth){
+    const cd=computeDay(new Date(y,m-1,d),birthSaju(state.birth)),ago=daysAgo(k),left=LATE_DAYS-ago;
+    const VB=[["hit","맞았어요 (≧▽≦)"],["half","반쯤 (・_・)"],["miss","빗나감 (｡•́︿•̀｡)"]];
+    if(!empty)$("dayLog").querySelectorAll(".dl-note,.dl-list li:last-child").forEach(n=>n.remove());
+    $("dayLog").insertAdjacentHTML("beforeend",`<div class="late" data-k="${k}">
+      <p class="late-q"><b>${ago===1?"어제":ago+"일 전"}</b> 운세는 「${esc(cd.title)}」였어요. 맞았나요?</p>
+      <div class="verd sm">${VB.map(([v,t])=>`<button type="button" class="gloss gray" data-lv="${v}" aria-pressed="${e.verdict===v}">${t}</button>`).join("")}</div>
+      <textarea id="lateNote" aria-label="${m}월 ${d}일 한 줄 일기" placeholder="그날 있었던 일을 한 줄로 남겨보세요">${e.note?esc(e.note):""}</textarea>
+      <div class="late-foot"><span class="small">${left>0?`앞으로 ${left}일 더 고칠 수 있어요`:"오늘까지 고칠 수 있어요"}</span><button type="button" class="gloss blue" id="lateSave">기록하기</button></div>
+    </div>`)}
 }
+const LATE_DAYS=7;
+function daysAgo(k){const [y,m,d]=k.split("-").map(Number);return Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate())-new Date(y,m-1,d))/864e5)}
+function canLate(k){const a=daysAgo(k);return a>=1&&a<=LATE_DAYS}
+function dayEntry(k){return state.days[k]||(state.days[k]={card:null,mission:false,verdict:null,note:""})}
+$("dayLog").addEventListener("click",ev=>{const box=ev.target.closest(".late");if(!box)return;const k=box.dataset.k;
+  const vb=ev.target.closest("[data-lv]");if(vb){const e=dayEntry(k);e.verdict=e.verdict===vb.dataset.lv?null:vb.dataset.lv;save();box.querySelectorAll("[data-lv]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lv===e.verdict)));return}
+  if(ev.target.closest("#lateSave")){const e=dayEntry(k);e.note=$("lateNote").value.trim();save();const [,mm,dd]=k.split("-").map(Number);toast(`${mm}월 ${dd}일 일기를 저장했어요 ✎`);renderRecord()}});
+function openLate(k){selDay=k;go("record");setTimeout(()=>{const t=$("lateNote");if(t){t.scrollIntoView({behavior:"smooth",block:"center"});t.focus({preventScroll:true})}},350)}
+document.addEventListener("click",ev=>{const b=ev.target.closest("[data-late]");if(b)openLate(b.dataset.late)});
 function renderRecord(){
   const y=now.getFullYear(),m=now.getMonth();$("rMonth").textContent=`${y}년 ${m+1}월`;
   const cal=$("cal");cal.innerHTML="";
